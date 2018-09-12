@@ -132,4 +132,21 @@ class AthleteEmgData(viewsets.ModelViewSet):
 		serializer.save(user_profile=self.request.user)
 
 
+class AthleteMedSessionData(viewsets.ModelViewSet):
+	"""handles listing out the viewset of the emg results"""
+
+	serializer_class = serializers.AthleteMedSessionSerializer
+	queryset = models.AthleteMedSession.objects.all()
+	filter_backends = (filters.SearchFilter,)
+	search_fields = ('user_profile',)
+
+	
+	def perform_create(self, serializer):
+		"""sets the user profile to the logged in user."""
+
+		serializer.save(user_profile=self.request.user)
+
+
+
+
 

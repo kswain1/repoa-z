@@ -83,9 +83,35 @@ class AthleteEMGDataItem(models.Model):
 	emg_data = JSONField()
 	created_on = models.DateTimeField(auto_now_add=True)
 
+
 	def __str__(self):
 		"""Returns the model as a string"""
 
 		return self.emg_data
+
+class AthleteMedSession(models.Model):
+	"""Posting the athletes emg data for sessions"""
+
+	user_profile = models.ForeignKey('AthleteProfile',on_delete=models.CASCADE)
+	user_age = models.IntegerField()
+	profile_image = models.URLField()
+	tib_anterior_lle = JSONField()
+	tib_anterior_rle = JSONField()
+	peroneals_rle = JSONField()
+	peroneals_lle = JSONField()
+	med_gastro_rle = JSONField()
+	med_gastro_lle = JSONField()
+	lat_gastro_rle = JSONField()
+	lat_gastro_lle = JSONField()
+	created_on = models.DateTimeField(auto_now_add=True)
+	assessment = models.TextField()
+	treatment = models.TextField()
+
+	def __str__(self):
+		"""Returns the model with the user id"""
+
+		return self.user_profile
+
+
 
 
