@@ -27,5 +27,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^api/', include('college_api.urls')),
     url(r'', include('college_api.urls')),
-
 ]

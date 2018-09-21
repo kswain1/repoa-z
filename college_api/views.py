@@ -6,10 +6,14 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework import filters
 #from rest_framework import viewset
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.authtoken.views import ObtainAuthToken
 
 from . import serializers
 from . import models
 # Create your views here.
+from . import permissions
 
 class HelloWorldView(APIView):
 	"""Test API View"""
@@ -139,6 +143,8 @@ class AthleteMedSessionData(viewsets.ModelViewSet):
 	queryset = models.AthleteMedSession.objects.all()
 	filter_backends = (filters.SearchFilter,)
 	search_fields = ('user_profile',)
+	permission_class = (permissions.UpdateOwnProfile)
+	authentication_classes = (TokenAuthentication,)
 
 	
 	def perform_create(self, serializer):
@@ -147,6 +153,14 @@ class AthleteMedSessionData(viewsets.ModelViewSet):
 		serializer.save(user_profile=self.request.user)
 
 
+class LoginViewSet(viewsets.ViewSet):
+	"""Checks email and password and returns auth token"""
 
+	serializer_class = AuthTokenSerializer
+
+	def create(self, request):
+		"""Use the obtainAuthToken APIView to validate and create a token"""
+
+		return ObtainAuthToken().post(request)
 
 

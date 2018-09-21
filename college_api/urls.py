@@ -10,6 +10,7 @@ router.register('profile', views.AthleteProfileViewSet)
 router.register('feed', views.AthleteFeedViewSet)
 router.register('emg',views.AthleteEmgData)
 router.register('medsession',views.AthleteMedSessionData)
+router.register('login', views.LoginViewSet, base_name='login')
 
 
 urlpatterns = [
