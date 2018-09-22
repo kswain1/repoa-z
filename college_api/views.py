@@ -9,6 +9,7 @@ from rest_framework import filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from . import serializers
 from . import models
@@ -110,12 +111,15 @@ class AthleteProfileViewSet(viewsets.ModelViewSet):
 	queryset = models.AthleteProfile.objects.all()
 	filter_backends = (filters.SearchFilter,)
 	search_fields = ('name','email',)
+	permission_class = (permissions.UpdateOwnProfile.has_object_permission)
+	authentication_classes = (TokenAuthentication,)
 
 class AthleteFeedViewSet(viewsets.ModelViewSet):
 	"""handles creating, reading, and updating profile feed items."""
 
 	serializer_class = serializers.AthleteFeedItemSerializer
 	queryset = models.AthleteFeedItem.objects.all()
+	permission_class = (permissions.PostOwnStatus, IsAuthenticatedOrReadOnly)
 
 	def perform_create(self, serializer):
 		"""sets the user profile to the logged in user."""
@@ -143,8 +147,8 @@ class AthleteMedSessionData(viewsets.ModelViewSet):
 	queryset = models.AthleteMedSession.objects.all()
 	filter_backends = (filters.SearchFilter,)
 	search_fields = ('user_profile',)
-	permission_class = (permissions.UpdateOwnProfile)
-	authentication_classes = (TokenAuthentication,)
+	# permission_class = (permissions.UpdateOwnProfile)
+	# authentication_classes = (TokenAuthentication,)
 
 	
 	def perform_create(self, serializer):
