@@ -31,6 +31,22 @@ class AthleteProfileSerializer(serializers.ModelSerializer):
 
 		return user
 
+class Player(serializers.ModelSerializer):
+	"""a serializer table for working with the player"""
+
+	class Meta: 
+		model = models.Player
+		fields = ('trainer_profile','player_name','team_name','user_age',)
+		extra_kwargs = {'trainer_profile':{'read_only': True}}
+
+class Team(serializers.ModelSerializer):
+	""" for creating teams for the model"""
+
+	class Meta: 
+		model = models.Team
+		fields = ('team_name',)
+
+
 class AthleteFeedItemSerializer(serializers.ModelSerializer):
 	"""A serializer for profile feed items"""
 

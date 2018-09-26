@@ -9,6 +9,7 @@ from rest_framework import filters
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from . import serializers
 from . import models
@@ -163,4 +164,22 @@ class LoginViewSet(viewsets.ViewSet):
 
 		return ObtainAuthToken().post(request)
 
+class Player(viewsets.ModelViewSet):
+	"""view set for viewing the player profile data"""
 
+	serializer_class = serializers.Player
+	queryset = models.Player.objects.all()
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
+
+
+	def perform_create(self, serializer):
+		"""sets the user profile to the logged in user."""
+
+		serializer.save(trainer_profile=self.request.user)
+
+class Team(viewsets.ModelViewSet):
+	""" creates the different teams"""
+
+	serializer_class = serializers.Team
+	queryset = models.Team.objects.all()
