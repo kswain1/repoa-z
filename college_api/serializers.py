@@ -46,3 +46,18 @@ class AthleteEMGDataSerializer(serializers.ModelSerializer):
 		model = models.AthleteEMGDataItem
 		fields = ('id', 'user_profile', 'emg_data', 'created_on')
 		extra_kwargs = {'user_profile': {'read_only':True}}
+
+class AthleteMedSessionSerializer(serializers.ModelSerializer):
+	"""a serilizer for the post of athlete emg data"""
+
+	class Meta: 
+		model = models.AthleteMedSession
+		fields = ('id','user_profile','user_age','tib_anterior_lle','tib_anterior_rle',
+			'peroneals_rle','peroneals_rle','peroneals_lle', 'med_gastro_rle',
+			'med_gastro_lle','lat_gastro_rle','lat_gastro_lle', 'created_on',
+			'assessment','treatment')
+		extra_kwargs = {'user_profile': {'read_only':True}}
+
+
+
+

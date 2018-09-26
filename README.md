@@ -27,6 +27,11 @@ python mange.py runserver
 ### Models & Database Migrations 
 - Database migrations can be updated 
 
+### Hosting API Project with Heroku 
+- Leverage Gunicorn 
+- Ensure your server app(main application) is at the root level of your project 
+- Leverage Whitenoise to collect static content when working with Django
+
 ### Point of Serilizers 
 - Serializers allow you to create a post and put to your database 
 - Allows you convert json data into python objects that can be stored in the database
@@ -134,7 +139,7 @@ python mange.py runserver
 
 *** Defintion ***
 
-'Post /api/players/<id>'
+'Post /api/players/'
   
 ### Definition
 
@@ -151,6 +156,9 @@ python mange.py runserver
   "med_gastro_lle":[10,20,9,9,1],
   "lat_gastro_rle":[12,32,90,3,2],
   "lat_gastro_llt":[12,45,60,1,3],
+  "assessment":"this is my assessment for the current player",
+  "treatment":"this is my treatment for the current player",
+  "composite_score_left":{"Anterior":[56]}
   }
 ]
 ```
