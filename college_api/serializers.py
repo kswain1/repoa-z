@@ -59,5 +59,29 @@ class AthleteMedSessionSerializer(serializers.ModelSerializer):
 		extra_kwargs = {'user_profile': {'read_only':True}}
 
 
+class Player(serializers.ModelSerializer):
+	"""a serializer for creating new players"""
+	class Meta:
+		model = models.Player
+		fields = ('id','trainer_profile','player_name','team_name')
+		extra_kwargs = {'trainer_profile':{'read_only':True}}
+
+class MedicalReport(serializers.ModelSerializer):
+	"""Medical Report for players"""
+	class Meta:
+		model = models.Medical_Report
+		fields = ('player_id','user_age','created_on','injuries','surgeries','drug_allergies','medications')
+		extra_kwargs = {'player_id': {'read_only':True}}
+
+class Session(serializers.ModelSerializer):
+	"""Summary medical report for the athlete"""
+	class Meta:
+		model = models.Session
+		fields = ('peroneals_rle','peroneals_lle','med_gastro_lle','med_gastro_rle',
+			'tib_anterior_lle','tib_anterior_rle','lat_gastro_lle','lat_gastro_rle',
+			'created_on','assessment','treatment')
+		extra_kwargs = {'player_id':{'read_only':True}}
+
+
 
 

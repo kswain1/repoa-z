@@ -167,4 +167,14 @@ class LoginViewSet(viewsets.ViewSet):
 
 		return ObtainAuthToken().post(request)
 
+class Player(viewsets.ViewSet):
+	"""checks the email and password"""
+	serializer_class = serializers.Player
+	queryset = models.Player.objects.all()
+
+class Session(viewsets.ViewSet):
+	""" session view viewset"""
+	serializer_class = serializers.Session
+	queryset = models.Session.objects.all()
+
 

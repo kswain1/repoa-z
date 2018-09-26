@@ -33,6 +33,7 @@ class AthleteProfileManager(BaseUserManager):
 
 		return user
 
+
 class AthleteProfile(AbstractBaseUser, PermissionsMixin):
 	"""This class is going to represent a user profile inside of our system"""
 
@@ -89,6 +90,46 @@ class AthleteEMGDataItem(models.Model):
 
 		return self.emg_data
 
+class Player(models.Model):
+	"""player model"""
+	trainer_profile = models.ForeignKey('AthleteProfile',on_delete=models.CASCADE)
+	player_name = models.CharField(max_length=255)
+	team_name = models.OneToOneField('Team', on_delete=models.CASCADE)
+
+	def __str__(self):
+		"""returns the model as a string"""
+
+		return self.player_name
+
+class Team(models.Model):
+	team_name = models.CharField(max_length=255)
+
+class Medical_Report(models.Model):
+	"""Summary medical report for the athlete"""
+	player_id = models.ForeignKey('Player', on_delete=models.CASCADE, primary_key=True)
+	user_age = models.IntegerField()
+	created_on = models.DateTimeField(auto_now_add=True)
+	injuries = models.CharField(max_length=255, default=None)
+	surgeries = models.TextField()
+	drug_allergies = models.TextField()
+	medications = models.CharField(max_length=255)
+
+
+class Session(models.Model):
+	"""summary ofsession data holder"""
+	player_id = models.ForeignKey('Player', on_delete=models.CASCADE)
+	peroneals_rle = JSONField()
+	peroneals_lle = JSONField()
+	med_gastro_lle = JSONField()
+	med_gastro_rle = JSONField()
+	tib_anterior_lle = JSONField()
+	tib_anterior_rle = JSONField()
+	lat_gastro_lle = JSONField()
+	lat_gastro_rle = JSONField()
+	created_on = models.DateTimeField(auto_now_add=True)
+	assessment = models.TextField()
+	treatment = models.TextField()	
+
 class AthleteMedSession(models.Model):
 	"""Posting the athletes emg data for sessions"""
 
@@ -111,6 +152,22 @@ class AthleteMedSession(models.Model):
 		"""Returns the model with the user id"""
 
 		return self.user_profile
+
+class SessionSummary(models.Model):
+	user_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
+	peroneals_rle = JSONField()
+	peroneals_lle = JSONField()
+	med_gastro_lle = JSONField()
+	med_gastro_rle = JSONField()
+	tib_anterior_lle = JSONField()
+	tib_anterior_rle = JSONField()
+	lat_gastro_lle = JSONField()
+	lat_gastro_rle = JSONField()
+	created_on = models.DateTimeField(auto_now_add=True)
+	assessment = models.TextField()
+	treatment = models.TextField()
+
+
 
 
 

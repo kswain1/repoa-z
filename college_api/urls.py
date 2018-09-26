@@ -11,6 +11,10 @@ router.register('feed', views.AthleteFeedViewSet)
 router.register('emg',views.AthleteEmgData)
 router.register('medsession',views.AthleteMedSessionData)
 router.register('login', views.LoginViewSet, base_name='login')
+router.register('player', views.Player, base_name='Players')
+router.register('Session',views.Session)
+
+router.register('profile',views.Player, base_name='players')
 
 
 urlpatterns = [
