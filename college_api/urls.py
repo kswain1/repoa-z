@@ -13,7 +13,9 @@ router.register('medsession',views.AthleteMedSessionData)
 router.register('login', views.LoginViewSet, base_name='login')
 router.register('player', views.Player, base_name='Players')
 router.register('Session',views.Session)
+router.register('Team', views.Team)
 
+router.register('playerTest',views.PlayerTest, base_name='layerTest')
 router.register('profile',views.Player, base_name='players')
 
 

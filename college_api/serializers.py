@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.validators import UniqueValidator
 
 from . import models 
 
@@ -11,11 +12,12 @@ class HelloSerializer(serializers.Serializer):
 
 class AthleteProfileSerializer(serializers.ModelSerializer):
 	"""A  serializer fro our user profile objects"""
-
+	username = serializers.CharField(validators=[UniqueValidator(queryset=models.AthleteProfile.objects.all())])
+	email = serializers.EmailField(validators=[UniqueValidator(queryset=models.AthleteProfile.objects.all())])
 
 	class Meta: 
 		model = models.AthleteProfile 
-		fields = ('id','email','name','password',)
+		fields = ('id','username','name','password',)
 		extra_kwargs = {'password':{'write_only': True}}
 
 	def create(self, validated_data):
@@ -47,6 +49,13 @@ class AthleteEMGDataSerializer(serializers.ModelSerializer):
 		fields = ('id', 'user_profile', 'emg_data', 'created_on')
 		extra_kwargs = {'user_profile': {'read_only':True}}
 
+class PlayerTest(serializers.ModelSerializer):
+	class Meta:
+		model = models.PlayerTest
+		fields = ('id','trainer_profile','player_name','created_on')
+		extra_kwargs = {'trainer_profile':{'read_only':True}}
+
+
 class AthleteMedSessionSerializer(serializers.ModelSerializer):
 	"""a serilizer for the post of athlete emg data"""
 
@@ -59,11 +68,12 @@ class AthleteMedSessionSerializer(serializers.ModelSerializer):
 		extra_kwargs = {'user_profile': {'read_only':True}}
 
 
+
 class Player(serializers.ModelSerializer):
 	"""a serializer for creating new players"""
 	class Meta:
 		model = models.Player
-		fields = ('id','trainer_profile','player_name','team_name')
+		fields = ('trainer_profile','player_name','team_name')
 		extra_kwargs = {'trainer_profile':{'read_only':True}}
 
 class MedicalReport(serializers.ModelSerializer):
@@ -77,10 +87,17 @@ class Session(serializers.ModelSerializer):
 	"""Summary medical report for the athlete"""
 	class Meta:
 		model = models.Session
-		fields = ('peroneals_rle','peroneals_lle','med_gastro_lle','med_gastro_rle',
+		fields = ('player','peroneals_rle','peroneals_lle','med_gastro_lle','med_gastro_rle',
 			'tib_anterior_lle','tib_anterior_rle','lat_gastro_lle','lat_gastro_rle',
-			'created_on','assessment','treatment')
+			'created_on','assessment','treatment',)
 		extra_kwargs = {'player_id':{'read_only':True}}
+
+class Team(serializers.ModelSerializer):
+	"""Serializer """
+	class Meta:
+		model = models.Team
+		fields = ('team_name',)
+		extra_kwargs = {'id':{'read_only':True}}
 
 
 

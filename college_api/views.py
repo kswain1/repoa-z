@@ -155,26 +155,37 @@ class AthleteMedSessionData(viewsets.ModelViewSet):
 		"""sets the user profile to the logged in user."""
 
 		serializer.save(user_profile=self.request.user)
+class PlayerTest(viewsets.ModelViewSet):
+	"""Teting a new model out for players"""
+	serializer_class = serializers.PlayerTest
+	queryset = models.PlayerTest
 
 
-class LoginViewSet(viewsets.ViewSet):
+class LoginViewSet(viewsets.ModelViewSet):
 	"""Checks email and password and returns auth token"""
 
 	serializer_class = AuthTokenSerializer
+	queryset = models.AthleteProfile.objects.all()
 
 	def create(self, request):
 		"""Use the obtainAuthToken APIView to validate and create a token"""
 
 		return ObtainAuthToken().post(request)
 
-class Player(viewsets.ViewSet):
-	"""checks the email and password"""
+class Player(viewsets.ModelViewSet):
+	"""creates player objects in the database"""
 	serializer_class = serializers.Player
 	queryset = models.Player.objects.all()
 
-class Session(viewsets.ViewSet):
+class Session(viewsets.ModelViewSet):
 	""" session view viewset"""
 	serializer_class = serializers.Session
 	queryset = models.Session.objects.all()
+
+class Team(viewsets.ModelViewSet):
+	"""Team View"""
+	serializer_class = serializers.Team
+	queryset = models.Team.objects.all()
+
 
 
