@@ -64,6 +64,42 @@ class AthleteProfile(AbstractBaseUser, PermissionsMixin):
 
 		return self.email
 
+class Player(models.Model):
+	"""player model"""
+	trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE, null=True, blank=True)
+	player_name = models.CharField(max_length=255)
+	team_name = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, blank=True)
+	user_age = models.IntegerField()
+
+	def __str__(self):
+		"""returns method as a string"""
+
+		return self.player_name
+
+class Team(models.Model):
+	"""team name"""
+	team_name = models.CharField(max_length=255)
+
+	def __str__(self):
+		"""returns the model as a string name"""
+
+		return self.team_name
+
+class Session(models.Model):
+	"""summary ofsession data holder"""
+	player = models.ForeignKey('Player', on_delete=models.CASCADE)
+	peroneals_rle = JSONField()
+	peroneals_lle = JSONField()
+	med_gastro_lle = JSONField()
+	med_gastro_rle = JSONField()
+	tib_anterior_lle = JSONField()
+	tib_anterior_rle = JSONField()
+	lat_gastro_lle = JSONField()
+	lat_gastro_rle = JSONField()
+	created_on = models.DateTimeField(auto_now_add=True)
+	assessment = models.TextField()
+	treatment = models.TextField()
+
 class AthleteFeedItem(models.Model):
 	"""profile status update"""
 
