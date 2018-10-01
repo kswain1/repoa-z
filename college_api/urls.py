@@ -13,6 +13,7 @@ router.register('medsession',views.AthleteMedSessionData)
 router.register('login', views.LoginViewSet, base_name='login')
 router.register('player', views.Player)
 router.register('team', views.Team)
+router.register('session',views.Session)
 
 
 urlpatterns = [

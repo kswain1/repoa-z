@@ -20,3 +20,12 @@ class UpdatePlayerProfile(permissions.BasePermission):
 				return True
 
 			return obj.trainer_profile.id == request.user.id
+
+class UpdatePlayerSession(permissions.BasePermission):
+	"""alllows trainers to update the players permissions"""
+
+	def has_object_permission(self,request,view,obj):
+		if request.method in permissions.SAFE_METHODS:
+			return True
+
+		return obj.trainer_profile.id == request.user.id
