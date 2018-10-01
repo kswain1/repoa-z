@@ -183,3 +183,16 @@ class Team(viewsets.ModelViewSet):
 
 	serializer_class = serializers.Team
 	queryset = models.Team.objects.all()
+
+class Session(viewsets.ModelViewSet):
+	"""creates a session for the athlete"""
+
+	serializer_class = serializers.Session
+	queryset = models.Session.objects.all()
+	authentication_classes = (TokenAuthentication,)
+	permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
+
+	def perform_create(self, serializer):
+		"""sets the serializer to the correct profile"""
+
+		serializer.save(trainer_profile=self.request.user)

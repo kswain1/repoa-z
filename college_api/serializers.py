@@ -46,6 +46,17 @@ class Team(serializers.ModelSerializer):
 		model = models.Team
 		fields = ('team_name',)
 
+class Session(serializers.ModelSerializer):
+	"""Serialzier for the sessions"""
+	user_name = serializers.CharField(source='Session.players.player_name', read_only=True)
+
+	class Meta: 
+		model = models.Session
+		fields = ('trainer_profile', 'user_name', 'player_profile','peroneals_rle','peroneals_lle','med_gastro_lle',
+			'med_gastro_rle','tib_anterior_lle','tib_anterior_rle','lat_gastro_lle','lat_gastro_rle',
+			'created_on','assessment','treatment')
+		extra_kwargs = {'trainer_profile':{'read_only':True}}
+
 
 class AthleteFeedItemSerializer(serializers.ModelSerializer):
 	"""A serializer for profile feed items"""

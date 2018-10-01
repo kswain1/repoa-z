@@ -87,18 +87,19 @@ class Team(models.Model):
 
 class Session(models.Model):
 	"""summary ofsession data holder"""
-	player = models.ForeignKey('Player', on_delete=models.CASCADE)
-	peroneals_rle = JSONField()
-	peroneals_lle = JSONField()
-	med_gastro_lle = JSONField()
-	med_gastro_rle = JSONField()
-	tib_anterior_lle = JSONField()
-	tib_anterior_rle = JSONField()
-	lat_gastro_lle = JSONField()
-	lat_gastro_rle = JSONField()
+	trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE,)
+	player_profile = models.ForeignKey('Player', on_delete=models.CASCADE, null=True, blank=True)
+	peroneals_rle = JSONField(null=True, blank=True)
+	peroneals_lle = JSONField(null=True, blank=True)
+	med_gastro_lle = JSONField(null=True, blank=True)
+	med_gastro_rle = JSONField(null=True, blank=True)
+	tib_anterior_lle = JSONField(null=True, blank=True)
+	tib_anterior_rle = JSONField(null=True, blank=True)
+	lat_gastro_lle = JSONField(null=True, blank=True)
+	lat_gastro_rle = JSONField(null=True, blank=True)
 	created_on = models.DateTimeField(auto_now_add=True)
-	assessment = models.TextField()
-	treatment = models.TextField()
+	assessment = models.TextField(null=True, blank=True)
+	treatment = models.TextField(null=True, blank=True)
 
 class AthleteFeedItem(models.Model):
 	"""profile status update"""
