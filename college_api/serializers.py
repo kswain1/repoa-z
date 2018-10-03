@@ -36,7 +36,7 @@ class Player(serializers.ModelSerializer):
 
 	class Meta: 
 		model = models.Player
-		fields = ('trainer_profile','player_name','team_name','user_age',)
+		fields = ('id','trainer_profile','player_name','team_name','user_age',)
 		extra_kwargs = {'trainer_profile':{'read_only': True}}
 
 class Team(serializers.ModelSerializer):
@@ -44,7 +44,7 @@ class Team(serializers.ModelSerializer):
 
 	class Meta: 
 		model = models.Team
-		fields = ('team_name',)
+		fields = ('id','team_name',)
 
 class Session(serializers.ModelSerializer):
 	"""Serialzier for the sessions"""
