@@ -68,7 +68,7 @@ class Player(models.Model):
 	"""player model"""
 	trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE, null=True, blank=True)
 	player_name = models.CharField(max_length=255)
-	team_name = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, blank=True)
+	team = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, blank=True)
 	user_age = models.IntegerField()
 
 	def __str__(self):
@@ -84,6 +84,8 @@ class Team(models.Model):
 		"""returns the model as a string name"""
 
 		return self.team_name
+
+
 
 class Session(models.Model):
 	"""summary ofsession data holder"""
