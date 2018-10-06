@@ -40,14 +40,20 @@ class Team(serializers.ModelSerializer):
 		fields = ('id','team_name',)
 
 class Player(serializers.ModelSerializer):
-    """a serializer table for working with the player"""
+	"""a serializer table for working with the player"""
     #team_name = serializers.StringRelatedField(many=False, source='team')
-    team = Team()
+	team = Team()
 
-    class Meta:
-        model = models.Player
-        fields =('id','trainer_profile','player_name','team','user_age',)
-        extra_kwargs = {'trainer_profile':{'read_only':True}}
+	class Meta:
+		model = models.Player
+		fields =('id','trainer_profile','player_name','team','user_age',)
+		extra_kwargs = {'trainer_profile':{'read_only':True}}
+
+	def create(self, validated_data):
+		team_id = validated_data.pop('team')
+		team = models.Team.objects.get(id=team_id)
+		new_player = models.Player.objects.create(team=team, **validated_data)
+		return new_player
 
 class Session(serializers.ModelSerializer):
 	"""Serialzier for the sessions"""
