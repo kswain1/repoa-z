@@ -16,6 +16,9 @@ python mange.py runserver
 
 ```
 
+### Architecture of the View
+![img_6401](https://user-images.githubusercontent.com/9138420/46054554-6ea76580-c10d-11e8-95b0-43eaf86b6386.JPG)
+
 ## Key Notes Thus Far
 - endpoint is going to be hello-view, and it's going to render the as_view
 - Updating Admin site is very crucial 
