@@ -192,7 +192,7 @@ class Session(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter, )
-    search_fields = ('player_profile__player_name',)
+    search_fields = ('player_profile__player_name','player_profile__id',)
 
     def perform_create(self, serializer):
         """sets the serializer to the correct profile"""
