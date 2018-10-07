@@ -185,14 +185,15 @@ class Team(viewsets.ModelViewSet):
 	queryset = models.Team.objects.all()
 
 class Session(viewsets.ModelViewSet):
-	"""creates a session for the athlete"""
+    """creates a session for the athlete"""
 
-	serializer_class = serializers.Session
-	queryset = models.Session.objects.all()
-	authentication_classes = (TokenAuthentication,)
-	permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
+    serializer_class = serializers.Session
+    queryset = models.Session.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('player_profile__player_name',)
 
-	def perform_create(self, serializer):
-		"""sets the serializer to the correct profile"""
-
-		serializer.save(trainer_profile=self.request.user)
+    def perform_create(self, serializer):
+        """sets the serializer to the correct profile"""
+        serializer.save(trainer_profile=self.request.user)

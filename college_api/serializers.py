@@ -42,29 +42,46 @@ class Team(serializers.ModelSerializer):
 class Player(serializers.ModelSerializer):
 	"""a serializer table for working with the player"""
     #team_name = serializers.StringRelatedField(many=False, source='team')
-	team = Team()
+	#team = Team()
 
 	class Meta:
 		model = models.Player
 		fields =('id','trainer_profile','player_name','team','user_age',)
 		extra_kwargs = {'trainer_profile':{'read_only':True}}
 
-	def create(self, validated_data):
-		team_id = validated_data.pop('team')
-		team = models.Team.objects.get(id=team_id)
-		new_player = models.Player.objects.create(team=team, **validated_data)
-		return new_player
+	# def create(self, validated_data):
+	# 	team_id = validated_data.pop('team')
+	# 	team = models.Team.objects.get(id=team_id)
+	# 	new_player = models.Player.objects.create(team=team, **validated_data)
+	# 	return new_player
+
+class ShortPlayer(serializers.ModelSerializer):
+
+	class Meta:
+		model = models.Player
+		fields=('player_name',)
+
 
 class Session(serializers.ModelSerializer):
 	"""Serialzier for the sessions"""
 	user_name = serializers.CharField(source='Session.players.player_name', read_only=True)
+	#player_profile = ShortPlayer(many=False)
 
 	class Meta: 
 		model = models.Session
-		fields = ('trainer_profile', 'user_name', 'player_profile','peroneals_rle','peroneals_lle','med_gastro_lle',
+		fields = ('trainer_profile','user_name','player_profile','peroneals_rle','peroneals_lle','med_gastro_lle',
 			'med_gastro_rle','tib_anterior_lle','tib_anterior_rle','lat_gastro_lle','lat_gastro_rle',
 			'created_on','assessment','treatment')
 		extra_kwargs = {'trainer_profile':{'read_only':True}}
+
+		#'player_profile__user_age'
+
+	# def create(self, validated_data):
+	# 	player_data = validated_data.pop('player')
+	# 	player = Player.create(Player(), validated_data=player_data)
+	# 	new_player_name = models.Session.create(player=player, **validated_data)
+	# 	return new_player_name
+
 
 
 class AthleteFeedItemSerializer(serializers.ModelSerializer):
