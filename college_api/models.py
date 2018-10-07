@@ -76,6 +76,11 @@ class Player(models.Model):
 
 		return self.player_name
 
+	def __unicode__(self):
+		"""returns player name as a string"""
+
+		return self.player_name
+
 class Team(models.Model):
 	"""team name"""
 	team_name = models.CharField(max_length=255)
