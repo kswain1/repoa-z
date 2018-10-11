@@ -44,7 +44,7 @@ class HelloWorldView(APIView):
             return Response({'message': message})
         else:
             return Response(
-                serilizer.errors, status=status.HTTP_400_BAD_REQUEST)
+                serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk=None):
         """Handles updating an object"""
