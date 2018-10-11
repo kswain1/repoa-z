@@ -41,11 +41,12 @@ class Team(serializers.ModelSerializer):
 
 class Player(serializers.ModelSerializer):
     """a serializer table for working with the player"""
+    #team = serializers.RelatedField(many=False, read_only=True)
 
     class Meta:
         model = models.Player
         fields = ('id', 'trainer_profile', 'player_name',
-                  'team', 'team_id', 'user_age',)
+                  'team', 'team_id','user_age',)
         extra_kwargs = {'trainer_profile': {'read_only': True}}
 
 
@@ -67,6 +68,15 @@ class Session(serializers.ModelSerializer):
                   'med_gastro_rle', 'tib_anterior_lle', 'tib_anterior_rle', 'lat_gastro_lle', 'lat_gastro_rle',
                   'created_on', 'assessment', 'treatment')
         extra_kwargs = {'trainer_profile': {'read_only': True}}
+
+
+class Injury(serializers.ModelSerializer):
+    """serializer for the injury models"""
+
+    class Meta:
+        model = models.Injury
+        fields = ('id','name','url')
+
 
     # 'player_profile__user_age'
 
