@@ -108,6 +108,24 @@ class Session(models.Model):
     assessment = models.TextField(null=True, blank=True)
     treatment = models.TextField(null=True, blank=True)
 
+class Composite(models.Model):
+    """fields for the composite score"""
+    player_profile = models.ForeignKey('Player', on_delete=models.CASCADE)
+    risk_area = models.ForeignKey('Injury', on_delete=models.CASCADE, null=True, blank=True)
+    left_leg_length = models.FloatField(null=True, blank=True)
+    right_leg_length = models.FloatField(null=True, blank=True)
+    post_medial_direction_rle = models.FloatField(null=True, blank=True)
+    post_medial_direction_lle = models.FloatField(null=True, blank=True)
+    ant_direction_rle = models.FloatField(null=True, blank=True)
+    ant_direction_lle = models.FloatField(null=True, blank=True)
+    post_lateral_direction_lle = models.FloatField(null=True, blank=True)
+    post_lateral_direction_rle = models.FloatField(null=True, blank=True)
+    composite_score_rle = models.FloatField(null=True, blank=True)
+    composite_score_lle = models.FloatField(null=True, blank=True)
+    assessment = models.TextField(null=True, blank=True)
+    treatment = models.TextField(null=True, blank=True)
+
+
 
 class Injury(models.Model):
     """list of all the major injuries an athlete can have"""

@@ -205,9 +205,19 @@ class Session(viewsets.ModelViewSet):
         """sets the serializer to the correct profile"""
         serializer.save(trainer_profile=self.request.user)
 
+class Composite(viewsets.ModelViewSet):
+    """creates the view for composite score data"""
+
+    serializer_class = serializers.Composite
+    queryset = models.Composite.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    #permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('player_profile')
+
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
     serializer_class =  serializers.Injury
     queryset = models.Injury.objects.all()
     # filter_backends = (filters.SearchFilter)
-    # search_fields = ('injury_name',)
+    # search_fields = ('ri)
