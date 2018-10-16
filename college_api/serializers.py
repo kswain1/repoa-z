@@ -69,6 +69,15 @@ class Session(serializers.ModelSerializer):
                   'created_on', 'assessment', 'treatment')
         extra_kwargs = {'trainer_profile': {'read_only': True}}
 
+class Composite(serializers.ModelSerializer):
+   """serializer for the composite and y-balance data"""
+
+   class Meta:
+        model = models.Composite
+        fields = ('id','player_profile','risk_area','left_leg_length','right_leg_length','postmedial_direction_rle','postmedial_direction_lle',
+                 'ant_direction_rle','ant_direction_lle','post_lateral_direction_lle','post_lateral_direction_rle',
+                 'composite_score','assessment','treatment')
+
 
 class Injury(serializers.ModelSerializer):
     """serializer for the injury models"""

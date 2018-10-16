@@ -15,6 +15,7 @@ router.register('player', views.Player)
 router.register('team', views.Team)
 router.register('session',views.Session)
 router.register('injury', views.Injury)
+router.register('compostie', views.Composite)
 
 
 urlpatterns = [
