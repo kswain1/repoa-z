@@ -41,7 +41,7 @@ class Team(serializers.ModelSerializer):
 
 class Player(serializers.ModelSerializer):
     """a serializer table for working with the player"""
-    team = Team()
+    #team = Team()
 
     class Meta:
         model = models.Player
