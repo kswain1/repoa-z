@@ -217,7 +217,7 @@ class Composite(viewsets.ModelViewSet):
 
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
-    serializer_class =  serializers.Injury
+    serializer_class = serializers.Injury
     queryset = models.Injury.objects.all()
     # filter_backends = (filters.SearchFilter)
     # search_fields = ('ri)

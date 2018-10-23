@@ -4,3 +4,5 @@ gunicorn==19.9.0
 jsonfield==2.0.2
 pytz==2018.5
 whitenoise==4.0
+dj-database-url
+psycopg2-binary
