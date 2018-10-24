@@ -76,7 +76,7 @@ class Composite(serializers.ModelSerializer):
         model = models.Composite
         fields = ('id','player_profile','risk_area','left_leg_length','right_leg_length','post_medial_direction_rle','post_medial_direction_lle',
                  'ant_direction_rle','ant_direction_lle','post_lateral_direction_lle','post_lateral_direction_rle',
-                 'composite_score_lle','composite_score_rle','assessment','treatment')
+                 'composite_score_lle','composite_score_rle','assessment','treatment', 'created_on')
 
 
 class Injury(serializers.ModelSerializer):

@@ -124,6 +124,7 @@ class Composite(models.Model):
     composite_score_lle = models.FloatField(null=True, blank=True)
     assessment = models.TextField(null=True, blank=True)
     treatment = models.TextField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
 
 
 
