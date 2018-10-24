@@ -213,7 +213,7 @@ class Composite(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     #permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('player_profile')
+    search_fields = ('player_profile__player_name', 'player_profile__id')
 
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
