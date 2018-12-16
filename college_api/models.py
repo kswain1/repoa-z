@@ -108,6 +108,22 @@ class Session(models.Model):
     assessment = models.TextField(null=True, blank=True)
     treatment = models.TextField(null=True, blank=True)
 
+class SessionLog(models.Model):
+    """complete data log of session"""
+    trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE,)
+    player_profile = models.ForeignKey('Player', on_delete=models.CASCADE, null=True, blank=True)
+    peroneals_rle = JSONField(null=True, blank=True)
+    peroneals_lle = JSONField(null=True, blank=True)
+    med_gastro_lle = JSONField(null=True, blank=True)
+    meg_gastro_rle = JSONField(null=True, blank=True)
+    tib_anterior_lle = JSONField(null=True, blank=True)
+    tib_anterior_rle = JSONField(null=True, blank=True)
+    lat_gastro_lle = JSONField(null=True, blank=True)
+    lat_gastro_rle = JSONField(null=True, blank=True)
+    created_on = models.DateField(null=True, blank=True)
+    assessment = models.TextField(null=True, blank=True)
+    treatment = models.TextField(null=True, blank=True)
+
 class Composite(models.Model):
     """fields for the composite score"""
     player_profile = models.ForeignKey('Player', on_delete=models.CASCADE)
@@ -169,8 +185,7 @@ class AthleteMedSession(models.Model):
     """Posting the athletes emg data for sessions"""
 
     user_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
-    user_age = models.IntegerField()
-    profile_image = models.URLField()
+    player_profile = models.ForeignKey('Player', on_delete=models.CASCADE, null=True, blank=True)
     tib_anterior_lle = JSONField()
     tib_anterior_rle = JSONField()
     peroneals_rle = JSONField()

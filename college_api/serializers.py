@@ -69,6 +69,8 @@ class Session(serializers.ModelSerializer):
                   'created_on', 'assessment', 'treatment')
         extra_kwargs = {'trainer_profile': {'read_only': True}}
 
+
+
 class Composite(serializers.ModelSerializer):
    """serializer for the composite and y-balance data"""
 
