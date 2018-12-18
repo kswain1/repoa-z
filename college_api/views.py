@@ -205,6 +205,20 @@ class Session(viewsets.ModelViewSet):
         """sets the serializer to the correct profile"""
         serializer.save(trainer_profile=self.request.user)
 
+class SessionLog(viewsets.ModelViewSet):
+    """creates a session summary"""
+
+    serializer_class = serializers.SessionLog
+    queryset = models.SessionLog.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('player_profile__player_name', 'player_profile__id',)
+
+    def perform_create(self, serializer):
+        """ automatically sets the serializer to the correct profile, and allows for the organization to be set"""
+        serializer.save(trainer_profile=self.request.user)
+
 class Composite(viewsets.ModelViewSet):
     """creates the view for composite score data"""
 

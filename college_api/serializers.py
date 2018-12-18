@@ -80,6 +80,18 @@ class Composite(serializers.ModelSerializer):
                  'ant_direction_rle','ant_direction_lle','post_lateral_direction_lle','post_lateral_direction_rle',
                  'composite_score_lle','composite_score_rle','assessment','treatment', 'created_on')
 
+class SessionLog(serializers.ModelSerializer):
+    """full data for the session log information"""
+    user_name = serializers.CharField(source='Session.players.player_name', read_only=True)
+
+    class Meta:
+        model = models.SessionLog
+        fields = ('id', 'trainer_profile', 'user_name', 'player_profile', 'peroneals_rle', 'peroneals_lle', 'med_gastro_lle',
+                  'med_gastro_rle', 'tib_anterior_lle', 'tib_anterior_rle', 'lat_gastro_lle', 'lat_gastro_rle',
+                  'created_on', 'assessment', 'treatment')
+        extra_kwargs = {'trainer_profile': {'read_only': True}}
+
+
 
 class Injury(serializers.ModelSerializer):
     """serializer for the injury models"""

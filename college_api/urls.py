@@ -14,6 +14,7 @@ router.register('login', views.LoginViewSet, base_name='login')
 router.register('player', views.Player)
 router.register('team', views.Team)
 router.register('session',views.Session)
+router.register('sessionlog', views.SessionLog)
 router.register('injury', views.Injury)
 router.register('composite', views.Composite)
 
