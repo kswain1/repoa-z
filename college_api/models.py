@@ -112,6 +112,7 @@ class SessionLog(models.Model):
     """complete data log of session"""
     trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE,)
     player_profile = models.ForeignKey('Player', on_delete=models.CASCADE, null=True, blank=True)
+    time = JSONField(null=-True, blank=True)
     peroneals_rle = JSONField(null=True, blank=True)
     peroneals_lle = JSONField(null=True, blank=True)
     med_gastro_lle = JSONField(null=True, blank=True)

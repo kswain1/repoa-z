@@ -10,6 +10,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 
 from . import serializers
 from . import models
@@ -177,6 +178,9 @@ class Player(viewsets.ModelViewSet):
     queryset = models.Player.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,DjangoFilterBackend)
+    search_fields = ('team__id','player_name')
+    # filter_fields = ('team',)
 
     def perform_create(self, serializer):
         """sets the user profile to the logged in user."""
@@ -227,7 +231,7 @@ class Composite(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     #permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('player_profile__player_name', 'player_profile__id')
+    search_fields = ('player_profile__player_name', 'player_profile__id', 'team_id')
 
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""

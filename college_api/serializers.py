@@ -88,7 +88,7 @@ class SessionLog(serializers.ModelSerializer):
         model = models.SessionLog
         fields = ('id', 'trainer_profile', 'user_name', 'player_profile', 'peroneals_rle', 'peroneals_lle', 'med_gastro_lle',
                   'med_gastro_rle', 'tib_anterior_lle', 'tib_anterior_rle', 'lat_gastro_lle', 'lat_gastro_rle',
-                  'created_on', 'assessment', 'treatment')
+                  'created_on', 'assessment', 'treatment','time')
         extra_kwargs = {'trainer_profile': {'read_only': True}}
 
 
