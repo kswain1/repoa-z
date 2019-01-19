@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'college_api',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_multiple_model',
 
 ]
 

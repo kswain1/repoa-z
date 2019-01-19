@@ -125,6 +125,34 @@ class SessionLog(models.Model):
     assessment = models.TextField(null=True, blank=True)
     treatment = models.TextField(null=True, blank=True)
 
+class MVC(models.Model):
+    """ Maximum Voltage Contraction (MVC) Amplitude scores for athletes"""
+    user_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
+    player_profile = models.ForeignKey('Player', on_delete=models.CASCADE)
+    tib_anterior_lle = models.FloatField(null=True, blank=True)
+    tib_anterior_rle = models.FloatField(null=True, blank=True)
+    med_gastro_rle = models.FloatField(null=True, blank=True)
+    med_gastro_lle = models.FloatField(null=True, blank=True)
+    peroneals_lle = models.FloatField(null=True, blank=True)
+    peroneals_rle = models.FloatField(null=True, blank=True)
+    lat_gastro_lle = models.FloatField(null=True, blank=True)
+    lat_gastro_rle = models.FloatField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+class MVCLog(models.Model):
+    """ Maximum Voltage Log Contraction (MVC) Amplitude scores for athletes"""
+    user_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
+    player_profile = models.ForeignKey('Player', on_delete=models.CASCADE)
+    tib_anterior_lle = JSONField(null=True, blank=True)
+    tib_anterior_rle = JSONField(null=True, blank=True)
+    med_gastro_rle = JSONField(null=True, blank=True)
+    med_gastro_lle = JSONField(null=True, blank=True)
+    peroneals_lle = JSONField(null=True, blank=True)
+    lat_gastro_lle = JSONField(null=True, blank=True)
+    lat_gastro_rle = JSONField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+
+
 class Composite(models.Model):
     """fields for the composite score"""
     player_profile = models.ForeignKey('Player', on_delete=models.CASCADE)
@@ -143,6 +171,10 @@ class Composite(models.Model):
     treatment = models.TextField(null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        """returns the model as a string name"""
+
+        return self.player_profile
 
 
 class Injury(models.Model):
@@ -196,8 +228,9 @@ class AthleteMedSession(models.Model):
     lat_gastro_rle = JSONField()
     lat_gastro_lle = JSONField()
     created_on = models.DateTimeField(auto_now_add=True)
-    assessment = models.TextField()
-    treatment = models.TextField()
+    assessment = models.TextField(null=True, blank=True)
+    treatment = models.TextField(null=True, blank=True)
+    user_age = models.IntegerField()
 
     def __str__(self):
         """Returns the model with the user id"""
