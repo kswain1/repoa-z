@@ -43,8 +43,13 @@ INSTALLED_APPS = [
     'college_api',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_multiple_model',
 
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,11 +86,12 @@ WSGI_APPLICATION = 'athletes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     # 'default': {
-#     #     'ENGINE': 'django.db.backends.sqlite3',
-#     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     # },
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    },
+}
 #     'default':{
 #             'ENGINE': 'django.db.backends.postgresql',
 #            'NAME': os.environ[DATABASE_URL],
@@ -100,8 +106,8 @@ WSGI_APPLICATION = 'athletes.wsgi.application'
 #     #                 1d3cdf289ae@ec2-54-227-244-12.compute-1.amazonaws.com:5432/d80gibomf6hbh2',
 #     #     }
 # }
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+# DATABASES = {}
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 

@@ -10,6 +10,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
+from drf_multiple_model.viewsets import ObjectMultipleModelAPIViewSet
+from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from . import serializers
 from . import models
@@ -149,9 +152,10 @@ class AthleteMedSessionData(viewsets.ModelViewSet):
     serializer_class = serializers.AthleteMedSessionSerializer
     queryset = models.AthleteMedSession.objects.all()
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('user_profile',)
+    search_fields = ('user_profile__id',)
     permission_class = (permissions.UpdateOwnProfile)
     authentication_classes = (TokenAuthentication,)
+
 
     def perform_create(self, serializer):
         """sets the user profile to the logged in user."""
@@ -177,6 +181,9 @@ class Player(viewsets.ModelViewSet):
     queryset = models.Player.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,DjangoFilterBackend)
+    search_fields = ('team__id','player_name')
+    # filter_fields = ('team',)
 
     def perform_create(self, serializer):
         """sets the user profile to the logged in user."""
@@ -205,6 +212,20 @@ class Session(viewsets.ModelViewSet):
         """sets the serializer to the correct profile"""
         serializer.save(trainer_profile=self.request.user)
 
+class SessionLog(viewsets.ModelViewSet):
+    """creates a session summary"""
+
+    serializer_class = serializers.SessionLog
+    queryset = models.SessionLog.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('player_profile__player_name', 'player_profile__id',)
+
+    def perform_create(self, serializer):
+        """ automatically sets the serializer to the correct profile, and allows for the organization to be set"""
+        serializer.save(trainer_profile=self.request.user)
+
 class Composite(viewsets.ModelViewSet):
     """creates the view for composite score data"""
 
@@ -213,7 +234,7 @@ class Composite(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     #permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('player_profile__player_name', 'player_profile__id')
+    search_fields = ('player_profile__player_name', 'player_profile__id', 'team_id')
 
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
@@ -221,3 +242,76 @@ class Injury(viewsets.ModelViewSet):
     queryset = models.Injury.objects.all()
     # filter_backends = (filters.SearchFilter)
     # search_fields = ('ri)
+
+class MVCData(viewsets.ModelViewSet):
+    """creates a injury list for athletes to choose from"""
+    serializer_class = serializers.MVCSerializer
+    queryset = models.MVC.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateMVC, IsAuthenticatedOrReadOnly)
+    # filter_backends = (filters.SearchFilter)
+    # search_fields = ('ri)
+
+    def perform_create(self, serializer):
+        """automatically sets the serializer to the proper content"""
+        serializer.save(user_profile=self.request.user)
+
+
+class PlayerDashboard(ObjectMultipleModelAPIViewSet):
+    querylist = [
+        {'queryset': models.Player.objects.all(), 'serializer_class': serializers.Player},
+        {'queryset': models.Session.objects.all(), 'serializer_class': serializers.Session},
+    ]
+
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('id',)
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
+
+class PlayerInjuryDashboard(ObjectMultipleModelAPIView):
+
+    def get_querylist(self):
+        # my_id = self.request.query_params['Session'].replace('-',' ')
+        print("Interesting Data", dir(self.request.query_params['Player'].replace('-',' ')), self.request.query_params.keys())
+
+        querylist = (
+            {'queryset': models.Player.objects.filter(id=5), 'serializer_class': serializers.Player},
+            {'queryset': models.Session.objects.filter(player_profile=5), 'serializer_class': serializers.Session}
+        )
+
+
+        print("Hello", querylist[0]['queryset'].values('id','player_name')[0])
+        print("trial Two", dir(querylist[0]['queryset']), querylist[0]['queryset'].first())
+        for e in querylist[0]['queryset'].values():
+            if e['id'] == 5:
+                print("Nathan Data", e)
+
+        return querylist
+
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('id',)
+
+
+class MVC(APIView):
+    """ creates a view for MVC data updates"""
+
+    serializer_class = serializers.MVCSerializer
+
+    def get(self, request, format=None):
+        """ Testing API View"""
+
+        an_apiview = [
+            'Uses HTTP methods as function (get, post, put, and delete)',
+            'It is very similar to a django view',
+            'gives you the most control over your logic',
+            'Its mappped directly to your urls'
+        ]
+
+        return Response( {'message':'Description', 'an_api_view':an_apiview} )
+
+    # def post(self, request):
+    #     """Created a hello message with your name"""
+    #
+    #     serializer = serializers.HelloSerializer(data=request.data)

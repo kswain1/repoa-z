@@ -6,3 +6,5 @@ pytz==2018.5
 whitenoise==4.0
 dj-database-url
 psycopg2-binary
+django-filter
+django-rest-multiple-models

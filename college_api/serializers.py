@@ -69,6 +69,8 @@ class Session(serializers.ModelSerializer):
                   'created_on', 'assessment', 'treatment')
         extra_kwargs = {'trainer_profile': {'read_only': True}}
 
+
+
 class Composite(serializers.ModelSerializer):
    """serializer for the composite and y-balance data"""
 
@@ -77,6 +79,18 @@ class Composite(serializers.ModelSerializer):
         fields = ('id','player_profile','risk_area','left_leg_length','right_leg_length','post_medial_direction_rle','post_medial_direction_lle',
                  'ant_direction_rle','ant_direction_lle','post_lateral_direction_lle','post_lateral_direction_rle',
                  'composite_score_lle','composite_score_rle','assessment','treatment', 'created_on')
+
+class SessionLog(serializers.ModelSerializer):
+    """full data for the session log information"""
+    user_name = serializers.CharField(source='Session.players.player_name', read_only=True)
+
+    class Meta:
+        model = models.SessionLog
+        fields = ('id', 'trainer_profile', 'user_name', 'player_profile', 'peroneals_rle', 'peroneals_lle', 'med_gastro_lle',
+                  'med_gastro_rle', 'tib_anterior_lle', 'tib_anterior_rle', 'lat_gastro_lle', 'lat_gastro_rle',
+                  'created_on', 'assessment', 'treatment','time')
+        extra_kwargs = {'trainer_profile': {'read_only': True}}
+
 
 
 class Injury(serializers.ModelSerializer):
@@ -123,4 +137,14 @@ class AthleteMedSessionSerializer(serializers.ModelSerializer):
                   'peroneals_rle', 'peroneals_rle', 'peroneals_lle', 'med_gastro_rle',
                   'med_gastro_lle', 'lat_gastro_rle', 'lat_gastro_lle', 'created_on',
                   'assessment', 'treatment')
+        extra_kwargs = {'user_profile': {'read_only': True}}
+
+class MVCSerializer(serializers.ModelSerializer):
+    """A serializer for posting MVC data from the EMG"""
+
+    class Meta:
+        model = models.MVC
+        fields = ('id', 'user_profile', 'player_profile', 'tib_anterior_lle', 'tib_anterior_rle', 'med_gastro_lle',
+                  'med_gastro_rle','peroneals_lle', 'peroneals_rle', 'lat_gastro_rle', 'lat_gastro_lle',
+                  'created_on')
         extra_kwargs = {'user_profile': {'read_only': True}}
