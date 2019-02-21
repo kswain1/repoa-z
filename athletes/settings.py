@@ -16,8 +16,8 @@ import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# DATABASE_URL = 'postgres://hjandlpzmpienu:0c3e550f0a4bcf6d1749a7709d8e5da778362fc4727cd07c5710f1d3cdf289ae@ec2' \
-#                '-54-227-244-12.compute-1.amazonaws.com:5432/d80gibomf6hbh2'
+DATABASE_URL = 'postgres://hjandlpzmpienu:0c3e550f0a4bcf6d1749a7709d8e5da778362fc4727cd07c5710f1d3cdf289ae@ec2' \
+               '-54-227-244-12.compute-1.amazonaws.com:5432/d80gibomf6hbh2'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -86,12 +86,12 @@ WSGI_APPLICATION = 'athletes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#     },
+# }
 #     'default':{
 #             'ENGINE': 'django.db.backends.postgresql',
 #            'NAME': os.environ[DATABASE_URL],
@@ -106,8 +106,8 @@ DATABASES = {
 #     #                 1d3cdf289ae@ec2-54-227-244-12.compute-1.amazonaws.com:5432/d80gibomf6hbh2',
 #     #     }
 # }
-# DATABASES = {}
-# DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
 
 
