@@ -19,6 +19,7 @@ class AthleteProfileManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(email=email, name=name)
 
+
         user.set_password(password)
         user.save(using=self._db)
 
@@ -68,7 +69,7 @@ class Player(models.Model):
     """player model"""
     trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE, null=True, blank=True)
     player_name = models.CharField(max_length=255)
-    team = models.ForeignKey('Team', on_delete=models.CASCADE, null=True, blank=True)
+    team = models.ForeignKey('Team', on_delete=models.CASCADE, blank=True)
     user_age = models.IntegerField()
 
     def __str__(self):
@@ -125,6 +126,14 @@ class SessionLog(models.Model):
     assessment = models.TextField(null=True, blank=True)
     treatment = models.TextField(null=True, blank=True)
 
+class MVCType(models.Model):
+    """List of types of MVC sessions"""
+    mvc_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        """returns the team models as a string"""
+        return self.mvc_name
+
 class MVC(models.Model):
     """ Maximum Voltage Contraction (MVC) Amplitude scores for athletes"""
     user_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
@@ -137,6 +146,7 @@ class MVC(models.Model):
     peroneals_rle = models.FloatField(null=True, blank=True)
     lat_gastro_lle = models.FloatField(null=True, blank=True)
     lat_gastro_rle = models.FloatField(null=True, blank=True)
+    mvc = models.ForeignKey(MVCType, on_delete=models.CASCADE , blank=True)
     created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
 class MVCLog(models.Model):

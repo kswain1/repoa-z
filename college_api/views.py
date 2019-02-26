@@ -243,6 +243,12 @@ class Injury(viewsets.ModelViewSet):
     # filter_backends = (filters.SearchFilter)
     # search_fields = ('ri)
 
+
+class MVCTypeViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.MVCType
+    queryset = models.MVCType.objects.all()
+
+
 class MVCData(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
     serializer_class = serializers.MVCSerializer
@@ -292,6 +298,7 @@ class PlayerInjuryDashboard(ObjectMultipleModelAPIView):
 
     filter_backends = (filters.SearchFilter,)
     search_fields = ('id',)
+
 
 
 class MVC(APIView):
