@@ -148,6 +148,14 @@ class MVCSerializer(serializers.ModelSerializer):
                   'med_gastro_rle','peroneals_lle', 'peroneals_rle', 'lat_gastro_rle', 'lat_gastro_lle', 'mvc',
                   'created_on')
         extra_kwargs = {'user_profile': {'read_only': True}}
+class MVCLogSerializer(serializers.ModelSerializer):
+    """A serializer for posting MVC Log data from the EMG"""
+
+    class Meta:
+        model = models.MVCLog
+        fields = ('id', 'user_id', 'player_profile', 'tib_anterior_lle','tib_anterior_rle', 'med_gastro_lle', 'med_gastro_rle',
+                  'peroneals_lle','peroneals_rle','lat_gastro_lle','lat_gastro_rle','mvc','created_on')
+        extra_kwargs = {'user_id': {'read_only':True}}
 
 class MVCType(serializers.ModelSerializer):
     """A serializer for the different types of MVC data collection"""

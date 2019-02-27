@@ -248,6 +248,9 @@ class MVCTypeViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.MVCType
     queryset = models.MVCType.objects.all()
 
+class MVCLogViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.MVCLogSerializer
+    queryset = models.MVCLog.objects.all()
 
 class MVCData(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""

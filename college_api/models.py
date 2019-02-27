@@ -64,6 +64,14 @@ class AthleteProfile(AbstractBaseUser, PermissionsMixin):
 
         return self.email
 
+class UserRole(models.Model):
+    """types of user"""
+    user_role = models.CharField(max_length=255)
+
+    def __str__(self):
+        """returns the user type as a string name"""
+
+        return self.user_role
 
 class Player(models.Model):
     """player model"""
@@ -151,15 +159,17 @@ class MVC(models.Model):
 
 class MVCLog(models.Model):
     """ Maximum Voltage Log Contraction (MVC) Amplitude scores for athletes"""
-    user_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
+    user_id = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
     player_profile = models.ForeignKey('Player', on_delete=models.CASCADE)
     tib_anterior_lle = JSONField(null=True, blank=True)
     tib_anterior_rle = JSONField(null=True, blank=True)
     med_gastro_rle = JSONField(null=True, blank=True)
     med_gastro_lle = JSONField(null=True, blank=True)
     peroneals_lle = JSONField(null=True, blank=True)
+    peroneals_rle = JSONField(null=True, blank=True)
     lat_gastro_lle = JSONField(null=True, blank=True)
     lat_gastro_rle = JSONField(null=True, blank=True)
+    mvc = models.ForeignKey(MVCType, on_delete=models.CASCADE, blank=True)
     created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
 
