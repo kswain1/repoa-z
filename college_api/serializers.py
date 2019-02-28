@@ -30,6 +30,14 @@ class AthleteProfileSerializer(serializers.ModelSerializer):
 
         return user
 
+class UserRole(serializers.ModelSerializer):
+    """roles of the different types of user"""
+
+    class Meta:
+        model = models.UserRole
+        fields = ('id', 'user_role')
+
+
 
 class Team(serializers.ModelSerializer):
     """ for creating teams for the model"""
@@ -163,3 +171,4 @@ class MVCType(serializers.ModelSerializer):
     class Meta:
         model = models.MVCType
         fields = ('id', 'mvc_name')
+

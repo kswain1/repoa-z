@@ -105,6 +105,13 @@ class HelloWorldViewSet(viewsets.ViewSet):
         return Response({'http_method': "Delete"})
 
 
+class UserRoleViewSet(viewsets.ModelViewSet):
+    """stores the different types of users on the platform"""
+    serializer_class = serializers.UserRole
+    queryset = models.UserRole.objects.all()
+
+
+
 # class AthleteProfileViewSet(views.ModelViewSet):
 # 	"""Handles creating, profiles"""
 
