@@ -16,6 +16,14 @@ python mange.py runserver
 
 ```
 
+### Database URI
+1. Testing Database can be found with the following
+```postgres://rchlffxbykhiro:dbd00e5fb2aadaf89176a91f1e3543eb6bdb83a1cf361adeb0ca4f01d85278f1@ec2-54-83-196-179.compute-1.amazonaws.com:5432/d810kkm7ar9bv4```
+1. Export Database or place this data inside of your config files
+
+```export DATABASE_URL="postgres://hjandlpzmpienu:0c3e550f0a4bcf6d1749a7709d8e5da778362fc4727cd07c5710f1d3cdf289ae@ec2-54-227-244-12.compute-1.amazonaws.com:5432/d80gibomf6hbh2"```
+
+
 ### Architecture of the View
 ![img_6401](https://user-images.githubusercontent.com/9138420/46054554-6ea76580-c10d-11e8-95b0-43eaf86b6386.JPG)
 

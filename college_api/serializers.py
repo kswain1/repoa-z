@@ -172,3 +172,10 @@ class MVCType(serializers.ModelSerializer):
         model = models.MVCType
         fields = ('id', 'mvc_name')
 
+class PlayerProfileSerializer(serializers.ModelSerializer):
+    """a serializer for player objects"""
+
+    class Meta:
+        model = models.PlayerProfile
+        fields = ('id', 'user_id', 'name', 'med_gastro', 'lat_gastro', 'tib_anterior', 'peroneals')
+        extra_kwargs = {'user_id':{'read_only':True}}

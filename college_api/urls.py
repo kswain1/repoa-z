@@ -23,6 +23,7 @@ router.register('playerdashboard', views.PlayerDashboard, base_name='playerdashb
 router.register('mvctype', views.MVCTypeViewSet, base_name='mvctype')
 router.register('mvclog', views.MVCLogViewSet, base_name='mvclog')
 router.register('userrole', views.UserRoleViewSet)
+router.register('playerprofile', views.PlayerProfileViewSet)
 # router.register('playerinjury', views.PlayerInjuryDashboard, base_name='playerinjury')
 
 # router_simple = SimpleRouter()

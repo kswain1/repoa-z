@@ -265,6 +265,15 @@ class MVCLogViewSet(viewsets.ModelViewSet):
         """automatically sets user_id based on user being logged in"""
         serializer.save(user_id=self.request.user)
 
+class PlayerProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.PlayerProfileSerializer
+    queryset = models.PlayerProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdateMVCLog, IsAuthenticatedOrReadOnly)
+
+    def perform_create(self, serializer):
+        """automagically sets the user_id to the usr being logged into"""
+        serializer.save(user_id=self.request.user)
 
 class MVCData(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
