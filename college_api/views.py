@@ -241,7 +241,7 @@ class Composite(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     #permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('player_profile__player_name', 'player_profile__id')
+    search_fields = ('player_profile__player_name', 'player_profile__id') ##have to use comme if we are just using one word
 
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
@@ -270,6 +270,9 @@ class PlayerProfileViewSet(viewsets.ModelViewSet):
     queryset = models.PlayerProfile.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdateMVCLog, IsAuthenticatedOrReadOnly)
+    import pdb; pdb.set_trace()
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name__id',) ##have to use comme if we are just using one word
 
     def perform_create(self, serializer):
         """automagically sets the user_id to the usr being logged into"""
