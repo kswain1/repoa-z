@@ -146,41 +146,41 @@ class PlayerProfile(models.Model):
     """stores the summary of a player profile based on signals from mvc and ybalance models"""
     user_id = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
     name = models.ForeignKey('Player', on_delete=models.CASCADE)
-    peroneals = JSONField(null=True, blank=True, default={'left':
-                                                              {'mvc':0,
-                                                               'effeciency_score':0,
-                                                               'exhaustion':[0,0,0]},
-                                                            'right':
-                                                                {'mvc':0,
-                                                                 'effeciency_score':0,
-                                                                 'exhaustion':[0,0,0]}
+    peroneals = JSONField(null=True, blank=True, default={"left":
+                                                              {"mvc":0,
+                                                               "effeciency_score":0,
+                                                               "exhaustion":[0,0,0]},
+                                                            "right":
+                                                                {"mvc":0,
+                                                                 "effeciency_score":0,
+                                                                 "exhaustion":[0,0,0]}
                                                           })
-    tib_anterior = JSONField(null=True, blank=True, default={'left':
-                                                              {'mvc':0,
-                                                               'effeciency_score':0,
-                                                               'exhaustion':[0,0,0]},
-                                                            'right':
-                                                                {'mvc':0,
-                                                                 'effeciency_score':0,
-                                                                 'exhaustion':[0,0,0]}
+    tib_anterior = JSONField(null=True, blank=True, default={"left":
+                                                              {"mvc":0,
+                                                               "effeciency_score":0,
+                                                               "exhaustion":[0,0,0]},
+                                                            "right":
+                                                                {"mvc":0,
+                                                                 "effeciency_score":0,
+                                                                 "exhaustion":[0,0,0]}
                                                           })
-    lat_gastro = JSONField(null=True, blank=True, default={'left':
-                                                              {'mvc':0,
-                                                               'effeciency_score':0,
-                                                               'exhaustion':[0,0,0]},
-                                                            'right':
-                                                                {'mvc':0,
-                                                                 'effeciency_score':0,
-                                                                 'exhaustion':[0,0,0]}
+    lat_gastro = JSONField(null=True, blank=True, default={"left":
+                                                              {"mvc":0,
+                                                               "effeciency_score":0,
+                                                               "exhaustion":[0,0,0]},
+                                                            "right":
+                                                                {"mvc":0,
+                                                                 "effeciency_score":0,
+                                                                 "exhaustion":[0,0,0]}
                                                           })
-    med_gastro = JSONField(null=True, blank=True, default={'left':
-                                                              {'mvc':0,
-                                                               'effeciency_score':0,
-                                                               'exhaustion':[0,0,0]},
-                                                            'right':
-                                                                {'mvc':0,
-                                                                 'effeciency_score':0,
-                                                                 'exhaustion':[0,0,0]}
+    med_gastro = JSONField(null=True, blank=True, default={"left":
+                                                              {"mvc":0,
+                                                               "effeciency_score":0,
+                                                               "exhaustion":[0,0,0]},
+                                                            "right":
+                                                                {"mvc":0,
+                                                                 "effeciency_score":0,
+                                                                 "exhaustion":[0,0,0]}
                                                           })
 
 
@@ -251,10 +251,10 @@ def updatePlayerProfile(instance, playerProfile):
         ## field is set to be our player profile muscle field
         if getattr(instance, i + "_lle") != "":
             field = getattr(playerProfile, i)
-            field['left']['mvc'] = getattr(instance, i + "_lle")
+            field["left"]["mvc"] = getattr(instance, i + "_lle")
         if getattr(instance, i + "_rle") != "":
             field = getattr(playerProfile, i)
-            field['right']['mvc'] = getattr(instance, i + "_rle")
+            field["right"]["mvc"] = getattr(instance, i + "_rle")
 
     playerProfile.save()
 
@@ -279,7 +279,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
         if getattr(instance , muscle+"_lle") != "":
             field = getattr(playerProfile, muscle)
             ##Fix in the future
-            if field['left']['mvc']:
+            if field["left"]["mvc"]:
                 effeciency = sum(json.loads(getattr(instance, muscle +"_lle")))/len(json.loads(getattr(instance, muscle +"_lle")))
                 effeciency = (effeciency/float(field['left']['mvc'])) * 100
 
@@ -302,8 +302,8 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 subMaxEffeciency = (subMaxCounter/len(emg_data)) * 100
                 minEffeciency = (minCounter/len(emg_data)) * 100
 
-                field['left']['effeciency_score'] = effeciency
-                field['left']['exhaustion'] = {'maxEffeciency':maxEffeciency,'subMaxEffeciency':subMaxEffeciency,'minEffeciency':minEffeciency}
+                field["left"]["effeciency_score"] = effeciency
+                field["left"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
         if getattr(instance , muscle+"_rle") != "":
             field = getattr(playerProfile, muscle)
@@ -332,8 +332,8 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 subMaxEffeciency = (subMaxCounter / len(emg_data)) * 100
                 minEffeciency = (minCounter / len(emg_data)) * 100
 
-                field['left']['effeciency_score'] = effeciency
-                field['left']['exhaustion'] = {'maxEffeciency':maxEffeciency,'subMaxEffeciency':subMaxEffeciency,'minEffeciency':minEffeciency}
+                field["left"]["effeciency_score"] = effeciency
+                field["left"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
     ##YbalUpdates
     playerProfile.save()
