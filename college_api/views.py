@@ -269,7 +269,7 @@ class PlayerProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PlayerProfileSerializer
     queryset = models.PlayerProfile.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.UpdateMVCLog, IsAuthenticatedOrReadOnly)
+    permission_classes = (permissions.UpdatePlayerProfilee, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name__id',) ##have to use comme if we are just using one word
 

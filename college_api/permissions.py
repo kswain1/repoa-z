@@ -49,3 +49,11 @@ class UpdateMVCLog(permissions.BasePermission):
             return True
 
         return obj.user_id.id == request.user.id
+class UpdatePlayerProfile(permissions.BasePermission):
+    """ allows trainer to upate player profile"""
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        return obj.user_id.id == request.user.id
