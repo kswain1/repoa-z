@@ -149,38 +149,54 @@ class PlayerProfile(models.Model):
     peroneals = JSONField(null=True, blank=True, default={"left":
                                                               {"mvc":0,
                                                                "effeciency_score":0,
-                                                               "exhaustion":[0,0,0]},
+                                                               "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}},
                                                             "right":
                                                                 {"mvc":0,
                                                                  "effeciency_score":0,
-                                                                 "exhaustion":[0,0,0]}
+                                                                 "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}}
                                                           })
     tib_anterior = JSONField(null=True, blank=True, default={"left":
                                                               {"mvc":0,
                                                                "effeciency_score":0,
-                                                               "exhaustion":[0,0,0]},
+                                                               "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}},
                                                             "right":
                                                                 {"mvc":0,
                                                                  "effeciency_score":0,
-                                                                 "exhaustion":[0,0,0]}
+                                                                 "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}}
                                                           })
     lat_gastro = JSONField(null=True, blank=True, default={"left":
                                                               {"mvc":0,
                                                                "effeciency_score":0,
-                                                               "exhaustion":[0,0,0]},
+                                                               "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}},
                                                             "right":
                                                                 {"mvc":0,
                                                                  "effeciency_score":0,
-                                                                 "exhaustion":[0,0,0]}
+                                                                 "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}}
                                                           })
     med_gastro = JSONField(null=True, blank=True, default={"left":
                                                               {"mvc":0,
                                                                "effeciency_score":0,
-                                                               "exhaustion":[0,0,0]},
+                                                               "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}},
                                                             "right":
                                                                 {"mvc":0,
                                                                  "effeciency_score":0,
-                                                                 "exhaustion":[0,0,0]}
+                                                                 "exhaustion":{"maxEffeciency":0,
+                                                                             "subMaxEffeciency":0,
+                                                                             "minEffeciency":0}}
                                                           })
 
 
@@ -297,7 +313,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
                     else:
                         minCounter += 1
 
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 maxEffeciency = (maxCounter/len(emg_data)) * 100
                 subMaxEffeciency = (subMaxCounter/len(emg_data)) * 100
                 minEffeciency = (minCounter/len(emg_data)) * 100
@@ -308,13 +324,12 @@ def updateYbalPlayerProfile(instance, playerProfile):
         if getattr(instance , muscle+"_rle") != "":
             field = getattr(playerProfile, muscle)
             ##Fix in the future
-            if field['left']['mvc']:
-                effeciency = sum(json.loads(getattr(instance, muscle + "_lle"))) / len(
-                    json.loads(getattr(instance, muscle + "_lle")))
-                effeciency = (effeciency / float(field['left']['mvc'])) * 100
+            if field["right"]["mvc"]:
+                effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_lle")))
+                effeciency = (effeciency / float(field["right"]["mvc"])) * 100
 
-                emg_data = json.loads(getattr(instance, muscle + "_lle"))
-                mvc = float(field['left']['mvc'])
+                emg_data = json.loads(getattr(instance, muscle + "_rle"))
+                mvc = float(field["right"]["mvc"])
                 maxCounter = 0
                 subMaxCounter = 0
                 minCounter = 0
@@ -327,13 +342,14 @@ def updateYbalPlayerProfile(instance, playerProfile):
                     else:
                         minCounter += 1
 
-
+                import pdb; pdb.set_trace()
                 maxEffeciency = (maxCounter / len(emg_data)) * 100
                 subMaxEffeciency = (subMaxCounter / len(emg_data)) * 100
                 minEffeciency = (minCounter / len(emg_data)) * 100
 
-                field["left"]["effeciency_score"] = effeciency
-                field["left"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
+                import pdb; pdb.set_trace()
+                field["right"]["effeciency_score"] = effeciency
+                field["right"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
     ##YbalUpdates
     playerProfile.save()
