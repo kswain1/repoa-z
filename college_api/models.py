@@ -186,11 +186,11 @@ class PlayerProfile(models.Model):
                                                                              "minEffeciency":0}}
                                                           })
     med_gastro = JSONField(null=True, blank=True, default={"left":
-                                                              {"mvc":0,
+                                                              {"mvc": 0,
                                                                "effeciency_score":0,
-                                                               "exhaustion":{"maxEffeciency":0,
-                                                                             "subMaxEffeciency":0,
-                                                                             "minEffeciency":0}},
+                                                               "exhaustion": {"maxEffeciency": 0,
+                                                                             "subMaxEffeciency": 0,
+                                                                             "minEffeciency": 0}},
                                                             "right":
                                                                 {"mvc":0,
                                                                  "effeciency_score":0,
@@ -255,7 +255,6 @@ def update_mvc_player(sender, **kwargs):
         if not checkPlayer:
             checkPlayer = PlayerProfile.objects.create(name_id=kwargs['instance'].player_profile.id,
                                                user_id_id=kwargs['instance'].user_id.id)
-
         updatePlayerProfile(kwargs['instance'],checkPlayer)
 
 
@@ -297,10 +296,10 @@ def updateYbalPlayerProfile(instance, playerProfile):
             ##Fix in the future
             if field["left"]["mvc"]:
                 effeciency = sum(json.loads(getattr(instance, muscle +"_lle")))/len(json.loads(getattr(instance, muscle +"_lle")))
-                effeciency = (effeciency/float(field['left']['mvc'])) * 100
+                effeciency = (effeciency/float(field["left"]["mvc"])) * 100
 
                 emg_data = json.loads(getattr(instance, muscle + "_lle"))
-                mvc = float(field['left']['mvc'])
+                mvc = float(field["left"]["mvc"])
                 maxCounter = 0
                 subMaxCounter = 0
                 minCounter = 0
