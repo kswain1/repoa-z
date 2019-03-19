@@ -335,7 +335,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
             # field = json.loads(field.replace("'", '"'))
 
             ##Fix in the future
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             if field["right"]["mvc"]:
                 effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_rle")))
                 effeciency = (effeciency / float(field["right"]["mvc"])) * 100
@@ -354,7 +354,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
                     else:
                         minCounter += 1
 
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 maxEffeciency = (maxCounter / len(emg_data)) * 100
                 subMaxEffeciency = (subMaxCounter / len(emg_data)) * 100
                 minEffeciency = (minCounter / len(emg_data)) * 100
