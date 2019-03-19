@@ -293,6 +293,11 @@ def updateYbalPlayerProfile(instance, playerProfile):
         #import pdb; pdb.set_trace()
         if getattr(instance , muscle+"_lle") != "":
             field = getattr(playerProfile, muscle)
+            # field = json.loads(field.replace("'", '"'))
+
+            if isinstance(field,str):
+                field = json.loads(field.replace("'", '"'))
+
             ##Fix in the future
             if field["left"]["mvc"]:
                 effeciency = sum(json.loads(getattr(instance, muscle +"_lle")))/len(json.loads(getattr(instance, muscle +"_lle")))
@@ -321,10 +326,18 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 field["left"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
         if getattr(instance , muscle+"_rle") != "":
+
             field = getattr(playerProfile, muscle)
+
+            if isinstance(field,str):
+                field = json.loads(field.replace("'", '"'))
+
+            # field = json.loads(field.replace("'", '"'))
+
             ##Fix in the future
+            import pdb; pdb.set_trace()
             if field["right"]["mvc"]:
-                effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_lle")))
+                effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_rle")))
                 effeciency = (effeciency / float(field["right"]["mvc"])) * 100
 
                 emg_data = json.loads(getattr(instance, muscle + "_rle"))
@@ -346,7 +359,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 subMaxEffeciency = (subMaxCounter / len(emg_data)) * 100
                 minEffeciency = (minCounter / len(emg_data)) * 100
 
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 field["right"]["effeciency_score"] = effeciency
                 field["right"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 

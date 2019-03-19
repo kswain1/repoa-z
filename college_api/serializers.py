@@ -180,17 +180,18 @@ class PlayerProfileSerializer(serializers.ModelSerializer):
         fields = ('id', 'user_id', 'name', 'med_gastro', 'lat_gastro', 'tib_anterior', 'peroneals')
         extra_kwargs = {'user_id':{'read_only':True}}
 
-    def get_med_gastro(self, value):
-        muscle_data = json.loads(value.med_gastro)
-        print("Hello we made it here")
-        return muscle_data
+    # def get_med_gastro(self, value):
+    #     muscle_data = json.loads(value.med_gastro)
+    #     print("Hello we made it here")
+    #     return muscle_data
 
     def to_representation(self, instance):
         muscles = ["med_gastro","lat_gastro","tib_anterior","peroneals"]
         muscle_data = super().to_representation(instance)
         print(muscle_data)
         for muscle in muscles:
-            muscle_data[muscle] = json.loads(muscle_data[muscle].replace("'",'"'))  #replacing single quotes with double quotes
+            if muscle_data[muscle]:
+                muscle_data[muscle] = json.loads(muscle_data[muscle].replace("'",'"'))  #replacing single quotes with double quotes
         return muscle_data
 
     def get_user_id(self):
