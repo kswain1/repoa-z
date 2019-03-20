@@ -78,6 +78,16 @@ class Session(serializers.ModelSerializer):
         extra_kwargs = {'trainer_profile': {'read_only': True}}
 
 
+class CompositeScore(serializers.ModelSerializer):
+    """serializer for the composite score bar"""
+
+    class Meta:
+        model = models.CompositeScore
+        fields = ('id','user','name','leg_length_rle', 'leg_length_lle','anterior_rle','anterior_lle',
+                  'posterior_medial_rle', 'posterior_medial_lle','posterior_lateral_lle','posterior_lateral_rle')
+        extra_kwargs = {'user':{'read_only':True}}
+
+
 
 class Composite(serializers.ModelSerializer):
    """serializer for the composite and y-balance data"""
@@ -172,12 +182,16 @@ class MVCType(serializers.ModelSerializer):
         model = models.MVCType
         fields = ('id', 'mvc_name')
 
+
+
 class PlayerProfileSerializer(serializers.ModelSerializer):
     """a serializer for player objects"""
 
     class Meta:
         model = models.PlayerProfile
-        fields = ('id', 'user_id', 'name', 'med_gastro', 'lat_gastro', 'tib_anterior', 'peroneals')
+        fields = ('id', 'user_id', 'name','leg_length_rle', 'leg_length_lle', 'anterior_rle', 'anterior_lle',
+                  'posterior_medial_rle', 'posterior_medial_lle', 'posterior_lateral_rle', 'posterior_lateral_lle',
+                  'composite_score_lle', 'composite_score_rle', 'med_gastro', 'lat_gastro', 'tib_anterior', 'peroneals')
         extra_kwargs = {'user_id':{'read_only':True}}
 
     # def get_med_gastro(self, value):
