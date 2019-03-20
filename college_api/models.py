@@ -207,7 +207,8 @@ def computeCompositeScore(instance, player):
 
 def checkPlayerDashboard(instance, player):
     # compute playerdashboard data set right
-    if player.anterior_rle != None and player.posterior_medial_rle != None and player.posterior_lateral_rle != None:
+    if player.anterior_rle != None and player.anterior_rle != 0.0 and player.posterior_medial_rle != None\
+        and player.posterior_medial_rle != 0.0 and player.posterior_lateral_rle != None and player.posterior_lateral_rle != 0.0:
         anterior = player.anterior_rle
         posterior_medial = player.posterior_medial_rle
         posterior_lateral = player.posterior_lateral_rle
@@ -216,7 +217,8 @@ def checkPlayerDashboard(instance, player):
             (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
     # computer playerdashboard data set for left
-    if player.anterior_lle != None and player.posterior_medial_lle != None and player.posterior_lateral_lle != None:
+    if player.anterior_lle != None  and player.anterior_lle != 0.0 and  player.posterior_medial_lle != None\
+            and player.posterior_medial_lle != 0.0 and player.posterior_lateral_lle != None and player.posterior_lateral_lle != 0.0:
         anterior = player.anterior_lle
         posterior_medial = player.posterior_medial_lle
         posterior_lateral = player.posterior_lateral_lle
