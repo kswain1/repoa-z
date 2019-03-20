@@ -277,6 +277,18 @@ class PlayerProfileViewSet(viewsets.ModelViewSet):
         """automagically sets the user_id to the usr being logged into"""
         serializer.save(user_id=self.request.user)
 
+class CompositeScore(viewsets.ModelViewSet):
+    serializer_class = serializers.CompositeScore
+    queryset = models.CompositeScore.objects.all()
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (permissions.UserProfileAuthenticate, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name__id',)
+
+    def perform_create(self, serializer):
+        """authenticate the user id"""
+        serializer.save(user=self.request.user)
+
 class MVCData(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
     serializer_class = serializers.MVCSerializer

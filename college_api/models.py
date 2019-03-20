@@ -125,6 +125,111 @@ class Session(models.Model):
     assessment = models.TextField(null=True, blank=True)
     treatment = models.TextField(null=True, blank=True)
 
+class CompositeScore(models.Model):
+    """" coposite score field """
+    user = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
+    name = models.ForeignKey('Player', on_delete=models.CASCADE,)
+    leg_length_rle = models.FloatField(null=True, blank=True, default=0.0)
+    leg_length_lle = models.FloatField(null=True, blank=True, default=0.0)
+    anterior_rle = models.FloatField(null=True, blank=True, default=0.0)
+    anterior_lle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_medial_rle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_medial_lle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_lateral_rle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_lateral_lle = models.FloatField(null=True, blank=True, default=0.0)
+
+##update the composite score for the players that are involved
+@receiver(post_save, sender=CompositeScore)
+def update_composite_score(sender, **kwargs):
+    if kwargs.get('created', False):
+        checkPlayer = PlayerProfile.objects.filter(name_id=kwargs['instance'].name.id).first()
+        #create the object
+        if not checkPlayer:
+            checkPlayer = PlayerProfile.objects.create(name_id=kwargs['instance'].name.id,
+                                               user_id_id=kwargs['instance'].user.id)
+        updatePlayerCompositeScore(kwargs['instance'],checkPlayer)
+        checkPlayerDashboard(kwargs['instance'], checkPlayer) #allows for only one y-bal direction to be posted at a time
+        computeCompositeScore(kwargs['instance'], checkPlayer) #only enables all instances to be posted at once
+
+
+def updatePlayerCompositeScore(instance, player):
+    composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
+    ##iterate throught the composite score
+    for i in composite_data_points:
+        ## field is set to be our player profile muscle field
+        if getattr(instance, i + "_lle") != "" and getattr(instance, i + "_lle") != None:
+            if i == "leg_length":
+                player.leg_length_lle = getattr(instance, i + "_lle")
+            elif i == "anterior":
+                player.anterior_lle = getattr(instance, i + "_lle")
+            elif i == "posterior_medial":
+                player.posterior_medial_lle = getattr(instance, i + "_lle")
+            elif i == "posterior_lateral":
+                player.posterior_lateral_lle = getattr(instance, i + "_lle")
+        if getattr(instance, i + "_rle") != "" and getattr(instance, i + "_rle") != None:
+            if i == "leg_length":
+                player.leg_length_rle = getattr(instance, i + "_rle")
+            elif i == "anterior":
+                player.anterior_rle = getattr(instance, i + "_rle")
+            elif i == "posterior_medial":
+                player.posterior_medial_rle = getattr(instance, i + "_rle")
+            elif i == "posterior_lateral":
+                player.posterior_lateral_rle = getattr(instance, i + "_rle")
+
+    player.save()
+
+def computeCompositeScore(instance, player):
+    composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
+
+    #compute based on data entry
+    if getattr(instance, "anterior_lle") != None and  getattr(instance, "leg_length_lle") != None\
+            and getattr(instance, "posterior_medial_lle") != None and getattr(instance, "posterior_lateral_lle") != None:
+        #then complete composite score
+        if player.leg_length_lle != "":
+            anterior = getattr(instance, "anterior_lle")
+            posterior_medial = getattr(instance, "posterior_medial_lle")
+            posterior_lateral = getattr(instance, "posterior_lateral_lle")
+            leg_length = getattr(instance, "leg_length_lle")
+            player.composite_score_lle = round( (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100) , 2 )
+
+    #computer based on data entry of all scores
+    if getattr(instance, "anterior_rle") != None and  getattr(instance, "leg_length_rle") != None\
+            and getattr(instance, "posterior_medial_rle") != None and getattr(instance, "posterior_lateral_rle") != None:
+        #check player conditions as well
+        if player.leg_length_rle != "":
+            anterior = getattr(instance, "anterior_rle")
+            posterior_medial = getattr(instance, "posterior_medial_rle")
+            posterior_lateral = getattr(instance, "posterior_lateral_rle")
+            leg_length = getattr(instance, "leg_length_rle")
+            player.composite_score_rle = round( (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100) , 2 )
+
+    player.save()
+
+def checkPlayerDashboard(instance, player):
+    # compute playerdashboard data set right
+    if player.anterior_rle != None and player.anterior_rle != 0.0 and player.posterior_medial_rle != None\
+        and player.posterior_medial_rle != 0.0 and player.posterior_lateral_rle != None and player.posterior_lateral_rle != 0.0:
+        anterior = player.anterior_rle
+        posterior_medial = player.posterior_medial_rle
+        posterior_lateral = player.posterior_lateral_rle
+        leg_length = player.leg_length_rle
+        player.composite_score_rle = round(
+            (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
+
+    # computer playerdashboard data set for left
+    if player.anterior_lle != None  and player.anterior_lle != 0.0 and  player.posterior_medial_lle != None\
+            and player.posterior_medial_lle != 0.0 and player.posterior_lateral_lle != None and player.posterior_lateral_lle != 0.0:
+        anterior = player.anterior_lle
+        posterior_medial = player.posterior_medial_lle
+        posterior_lateral = player.posterior_lateral_lle
+        leg_length = player.leg_length_lle
+        player.composite_score_lle = round(
+            (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
+
+    player.save()
+
+
+
 class SessionLog(models.Model):
     """complete data log of session"""
     trainer_profile = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE,)
@@ -146,6 +251,16 @@ class PlayerProfile(models.Model):
     """stores the summary of a player profile based on signals from mvc and ybalance models"""
     user_id = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
     name = models.ForeignKey('Player', on_delete=models.CASCADE)
+    leg_length_rle = models.FloatField(null=True, blank=True, default=0.0)
+    leg_length_lle = models.FloatField(null=True, blank=True, default=0.0)
+    anterior_rle = models.FloatField(null=True, blank=True, default=0.0)
+    anterior_lle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_medial_rle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_medial_lle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_lateral_rle = models.FloatField(null=True, blank=True, default=0.0)
+    posterior_lateral_lle = models.FloatField(null=True, blank=True, default=0.0)
+    composite_score_rle = models.FloatField(null=True, blank=True, default=0.0)
+    composite_score_lle = models.FloatField(null=True, blank=True, default=0.0)
     peroneals = JSONField(null=True, blank=True, default={"left":
                                                               {"mvc":0,
                                                                "effeciency_score":0,
@@ -246,7 +361,6 @@ class MVCLog(models.Model):
 ##step 1 updating mvc data
 ## step updated playerPorfile scores model
  ##run for loop for all of the fields, and update playerProfilemodel
-["tib_anterior", "med_gastro", "peroneals", "lat_gastro"]
 @receiver(post_save, sender=MVCLog)
 def update_mvc_player(sender, **kwargs):
     if kwargs.get('created', False):
@@ -291,9 +405,15 @@ def updateYbalPlayerProfile(instance, playerProfile):
     for muscle in muscles:
         ## field is set to be our player profile muscle field
         #import pdb; pdb.set_trace()
-        if getattr(instance , muscle+"_lle") != "":
+        if getattr(instance , muscle+"_lle") != "" and getattr(instance, muscle+"_lle") != "[]":
             field = getattr(playerProfile, muscle)
+            # field = json.loads(field.replace("'", '"'))
+
+            if isinstance(field,str):
+                field = json.loads(field.replace("'", '"'))
+
             ##Fix in the future
+            #import pdb;pdb.set_trace()
             if field["left"]["mvc"]:
                 effeciency = sum(json.loads(getattr(instance, muscle +"_lle")))/len(json.loads(getattr(instance, muscle +"_lle")))
                 effeciency = (effeciency/float(field["left"]["mvc"])) * 100
@@ -320,11 +440,19 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 field["left"]["effeciency_score"] = effeciency
                 field["left"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
-        if getattr(instance , muscle+"_rle") != "":
+        if getattr(instance , muscle+"_rle") != "" and getattr(instance, muscle+"_rle") != "[]":
+
             field = getattr(playerProfile, muscle)
+
+            if isinstance(field,str):
+                field = json.loads(field.replace("'", '"'))
+
+            # field = json.loads(field.replace("'", '"'))
+
             ##Fix in the future
+            #import pdb; pdb.set_trace()
             if field["right"]["mvc"]:
-                effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_lle")))
+                effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_rle")))
                 effeciency = (effeciency / float(field["right"]["mvc"])) * 100
 
                 emg_data = json.loads(getattr(instance, muscle + "_rle"))
@@ -341,12 +469,12 @@ def updateYbalPlayerProfile(instance, playerProfile):
                     else:
                         minCounter += 1
 
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 maxEffeciency = (maxCounter / len(emg_data)) * 100
                 subMaxEffeciency = (subMaxCounter / len(emg_data)) * 100
                 minEffeciency = (minCounter / len(emg_data)) * 100
 
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 field["right"]["effeciency_score"] = effeciency
                 field["right"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
