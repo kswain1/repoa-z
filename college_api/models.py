@@ -378,10 +378,13 @@ def updatePlayerProfile(instance, playerProfile):
     ##MVC Updates
     for i in muscles:
         ## field is set to be our player profile muscle field
-        if getattr(instance, i + "_lle") != "":
+        left_muscle = getattr(instance, i + "_lle")
+        if left_muscle != "" and left_muscle is not None:
             field = getattr(playerProfile, i)
             field["left"]["mvc"] = getattr(instance, i + "_lle")
-        if getattr(instance, i + "_rle") != "":
+
+        right_muscle = getattr(instance, i + "_rle")
+        if right_muscle != "" and right_muscle is not None:
             field = getattr(playerProfile, i)
             field["right"]["mvc"] = getattr(instance, i + "_rle")
 
@@ -443,7 +446,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
 
             setattr(playerProfile, muscle + "_lle", field)
 
-        right_muscle = getattr(instance , muscle+"_lle")
+        right_muscle = getattr(instance , muscle+"_rle")
         if right_muscle != "" and right_muscle != "[]" and right_muscle is not None:
 
             field = getattr(playerProfile, muscle)

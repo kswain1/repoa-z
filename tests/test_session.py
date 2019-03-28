@@ -54,9 +54,9 @@ def test_create_session(player, trainer, trainer_client, muscle):
 
     # Testing exhaustion
     exhaustion_data = side_data['exhaustion']
-    max_effeciency = len(filter(lambda r: r >= 0.7, readings)) / float(len(readings)) * 100
-    submax_effeciency = len(filter(lambda r: 0.5 <= r < 0.7, readings)) / float(len(readings)) * 100
-    min_effeciency = len(filter(lambda r: 0.0 <= r < 0.5, readings)) / float(len(readings)) * 100
+    max_effeciency = len(list(filter(lambda r: r >= 0.7, readings))) / float(len(readings)) * 100
+    submax_effeciency = len(list(filter(lambda r: 0.5 <= r < 0.7, readings))) / float(len(readings)) * 100
+    min_effeciency = len(list(filter(lambda r: 0.0 <= r < 0.5, readings))) / float(len(readings)) * 100
     assert exhaustion_data['maxEffeciency'] == max_effeciency
     assert exhaustion_data['subMaxEffeciency'] == submax_effeciency
     assert exhaustion_data['minEffeciency'] == min_effeciency
