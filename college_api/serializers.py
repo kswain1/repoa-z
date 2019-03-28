@@ -72,7 +72,8 @@ class Session(serializers.ModelSerializer):
 
     class Meta:
         model = models.Session
-        fields = ('id','trainer_profile', 'user_name', 'player_profile', 'peroneals_rle', 'peroneals_lle', 'med_gastro_lle',
+        fields = ('id', 'trainer_profile', 'user_name', 'player_profile', 'peroneals_rle', 'peroneals_lle',
+                  'med_gastro_lle',
                   'med_gastro_rle', 'tib_anterior_lle', 'tib_anterior_rle', 'lat_gastro_lle', 'lat_gastro_rle',
                   'created_on', 'assessment', 'treatment')
         extra_kwargs = {'trainer_profile': {'read_only': True}}

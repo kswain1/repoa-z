@@ -23,11 +23,12 @@ def test_create_session(player, trainer, trainer_client, muscle):
 
     data = {
         'player_profile': player.id,
-        'mvc': 15000,
-        muscle: readings_str
+        muscle: readings_str,
+        'assessment': 'test',
+        'treatment': 'test'
     }
     response = trainer_client.post('/api/session/', data)
-    assert response.status_code == 201
+    assert response.status_code == 201, response.content
 
     qs = Session.objects.all()
     assert qs.count() == 1
@@ -42,7 +43,10 @@ def test_create_session(player, trainer, trainer_client, muscle):
 
     player_profile = player.playerprofile_set.first()
     profile_muscle = muscle[:-4]
+    side = muscle[-3:]
 
+    muscle_data = getattr(player_profile, profile_muscle)
+    side_data = muscle_data[side_map[side]]
     # Testing effeciency score
     effeciency = sum(readings) / float(len(readings))
     score = effeciency / float(15000) * 100.0

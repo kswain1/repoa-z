@@ -1,6 +1,6 @@
 import pytest
 
-from college_api.models import MVCLog
+from college_api.models import MVCLog, AthleteProfile
 
 
 @pytest.mark.django_db

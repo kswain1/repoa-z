@@ -405,7 +405,8 @@ def updateYbalPlayerProfile(instance, playerProfile):
     for muscle in muscles:
         ## field is set to be our player profile muscle field
         #import pdb; pdb.set_trace()
-        if getattr(instance , muscle+"_lle") != "" and getattr(instance, muscle+"_lle") != "[]":
+        left_muscle = getattr(instance , muscle+"_lle")
+        if left_muscle != "" and left_muscle != "[]" and left_muscle is not None:
             field = getattr(playerProfile, muscle)
             # field = json.loads(field.replace("'", '"'))
 
@@ -415,7 +416,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
             ##Fix in the future
             #import pdb;pdb.set_trace()
             if field["left"]["mvc"]:
-                effeciency = sum(json.loads(getattr(instance, muscle +"_lle")))/len(json.loads(getattr(instance, muscle +"_lle")))
+                effeciency = sum(json.loads(left_muscle))/len(json.loads(left_muscle))
                 effeciency = (effeciency/float(field["left"]["mvc"])) * 100
 
                 emg_data = json.loads(getattr(instance, muscle + "_lle"))
@@ -440,7 +441,10 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 field["left"]["effeciency_score"] = effeciency
                 field["left"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
 
-        if getattr(instance , muscle+"_rle") != "" and getattr(instance, muscle+"_rle") != "[]":
+            setattr(playerProfile, muscle + "_lle", field)
+
+        right_muscle = getattr(instance , muscle+"_lle")
+        if right_muscle != "" and right_muscle != "[]" and right_muscle is not None:
 
             field = getattr(playerProfile, muscle)
 
@@ -452,7 +456,7 @@ def updateYbalPlayerProfile(instance, playerProfile):
             ##Fix in the future
             #import pdb; pdb.set_trace()
             if field["right"]["mvc"]:
-                effeciency = sum(json.loads(getattr(instance, muscle + "_rle"))) / len(json.loads(getattr(instance, muscle + "_rle")))
+                effeciency = sum(json.loads(right_muscle)) / len(json.loads(right_muscle))
                 effeciency = (effeciency / float(field["right"]["mvc"])) * 100
 
                 emg_data = json.loads(getattr(instance, muscle + "_rle"))
@@ -477,6 +481,8 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 #import pdb; pdb.set_trace()
                 field["right"]["effeciency_score"] = effeciency
                 field["right"]["exhaustion"] = {"maxEffeciency":maxEffeciency,"subMaxEffeciency":subMaxEffeciency,"minEffeciency":minEffeciency}
+
+            setattr(playerProfile, muscle + "_rle", field)
 
     ##YbalUpdates
     playerProfile.save()
