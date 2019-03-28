@@ -265,17 +265,31 @@ class MVCLogViewSet(viewsets.ModelViewSet):
         """automatically sets user_id based on user being logged in"""
         serializer.save(user_id=self.request.user)
 
+class PlayerProfileSearch(filters.SearchFilter):
+
+    def filter_queryset(self, request, queryset, view):
+        result = super().filter_queryset(request, queryset, view)
+        search_term = self.get_search_terms(request)
+        if len(search_term) > 0:
+            result = result.filter(name__id = self.get_search_terms(request)[0])
+
+        return result
+
+
 class PlayerProfileViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.PlayerProfileSerializer
     queryset = models.PlayerProfile.objects.all()
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (PlayerProfileSearch,)
     search_fields = ('name__id',) ##have to use comme if we are just using one word
+
+
 
     def perform_create(self, serializer):
         """automagically sets the user_id to the usr being logged into"""
         serializer.save(user_id=self.request.user)
+
 
 class CompositeScore(viewsets.ModelViewSet):
     serializer_class = serializers.CompositeScore

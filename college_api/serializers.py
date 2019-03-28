@@ -187,6 +187,8 @@ class MVCType(serializers.ModelSerializer):
 class PlayerProfileSerializer(serializers.ModelSerializer):
     """a serializer for player objects"""
 
+
+
     class Meta:
         model = models.PlayerProfile
         fields = ('id', 'user_id', 'name','leg_length_rle', 'leg_length_lle', 'anterior_rle', 'anterior_lle',
