@@ -129,14 +129,14 @@ class CompositeScore(models.Model):
     """" coposite score field """
     user = models.ForeignKey('AthleteProfile', on_delete=models.CASCADE)
     name = models.ForeignKey('Player', on_delete=models.CASCADE,)
-    leg_length_rle = models.FloatField(null=True, blank=True, default=0.0)
-    leg_length_lle = models.FloatField(null=True, blank=True, default=0.0)
-    anterior_rle = models.FloatField(null=True, blank=True, default=0.0)
-    anterior_lle = models.FloatField(null=True, blank=True, default=0.0)
-    posterior_medial_rle = models.FloatField(null=True, blank=True, default=0.0)
-    posterior_medial_lle = models.FloatField(null=True, blank=True, default=0.0)
-    posterior_lateral_rle = models.FloatField(null=True, blank=True, default=0.0)
-    posterior_lateral_lle = models.FloatField(null=True, blank=True, default=0.0)
+    leg_length_rle = models.FloatField(null=True, blank=True,)
+    leg_length_lle = models.FloatField(null=True, blank=True,)
+    anterior_rle = models.FloatField(null=True, blank=True,)
+    anterior_lle = models.FloatField(null=True, blank=True,)
+    posterior_medial_rle = models.FloatField(null=True, blank=True,)
+    posterior_medial_lle = models.FloatField(null=True, blank=True,)
+    posterior_lateral_rle = models.FloatField(null=True, blank=True,)
+    posterior_lateral_lle = models.FloatField(null=True, blank=True,)
 
 ##update the composite score for the players that are involved
 @receiver(post_save, sender=CompositeScore)
@@ -157,7 +157,7 @@ def updatePlayerCompositeScore(instance, player):
     ##iterate throught the composite score
     for i in composite_data_points:
         ## field is set to be our player profile muscle field
-        if getattr(instance, i + "_lle") != "" and getattr(instance, i + "_lle") != None:
+        if getattr(instance, i + "_lle") != 0.0 and getattr(instance, i + "_lle") != "" and getattr(instance, i + "_lle") != None:
             if i == "leg_length":
                 player.leg_length_lle = getattr(instance, i + "_lle")
             elif i == "anterior":
@@ -166,7 +166,7 @@ def updatePlayerCompositeScore(instance, player):
                 player.posterior_medial_lle = getattr(instance, i + "_lle")
             elif i == "posterior_lateral":
                 player.posterior_lateral_lle = getattr(instance, i + "_lle")
-        if getattr(instance, i + "_rle") != "" and getattr(instance, i + "_rle") != None:
+        if getattr(instance, i + "_rle") != 0.0 and getattr(instance, i + "_rle") != "" and getattr(instance, i + "_rle") != None:
             if i == "leg_length":
                 player.leg_length_rle = getattr(instance, i + "_rle")
             elif i == "anterior":
@@ -180,6 +180,7 @@ def updatePlayerCompositeScore(instance, player):
 
 def computeCompositeScore(instance, player):
     composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
+
 
     #compute based on data entry
     if getattr(instance, "anterior_lle") != None and  getattr(instance, "leg_length_lle") != None\
