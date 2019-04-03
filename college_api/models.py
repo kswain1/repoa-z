@@ -149,7 +149,7 @@ def update_composite_score(sender, **kwargs):
                                                user_id_id=kwargs['instance'].user.id)
         updatePlayerCompositeScore(kwargs['instance'],checkPlayer)
         checkPlayerDashboard(kwargs['instance'], checkPlayer) #allows for only one y-bal direction to be posted at a time
-        computeCompositeScore(kwargs['instance'], checkPlayer) #only enables all instances to be posted at once
+        #computeCompositeScore(kwargs['instance'], checkPlayer) #only enables all instances to be posted at once
 
 
 def updatePlayerCompositeScore(instance, player):
@@ -182,8 +182,9 @@ def computeCompositeScore(instance, player):
     composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
 
 
+
     #compute based on data entry
-    if getattr(instance, "anterior_lle") != None and  getattr(instance, "leg_length_lle") != None\
+    if getattr(instance, "anterior_lle") != None and getattr(instance, "anterior_lle") != 0.0 and  getattr(instance, "leg_length_lle") != None\
             and getattr(instance, "posterior_medial_lle") != None and getattr(instance, "posterior_lateral_lle") != None:
         #then complete composite score
         if player.leg_length_lle != "":
