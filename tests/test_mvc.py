@@ -1,6 +1,7 @@
 import pytest
+from django_dynamic_fixture import G
 
-from college_api.models import MVCLog, AthleteProfile
+from college_api.models import MVCLog, AthleteProfile, Player, PlayerProfile
 
 
 @pytest.mark.django_db
