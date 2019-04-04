@@ -147,9 +147,11 @@ def update_composite_score(sender, **kwargs):
         if not checkPlayer:
             checkPlayer = PlayerProfile.objects.create(name_id=kwargs['instance'].name.id,
                                                user_id_id=kwargs['instance'].user.id)
-        updatePlayerCompositeScore(kwargs['instance'],checkPlayer)
+
         checkPlayerDashboard(kwargs['instance'], checkPlayer) #allows for only one y-bal direction to be posted at a time
-        #computeCompositeScore(kwargs['instance'], checkPlayer) #only enables all instances to be posted at once
+        updatePlayerCompositeScore(kwargs['instance'], checkPlayer)
+        computeCompositeScore(kwargs['instance'], checkPlayer) #only enables all instances to be posted at once
+        checkPlayerDashboard(kwargs['instance'], checkPlayer)
 
 
 def updatePlayerCompositeScore(instance, player):
@@ -180,51 +182,87 @@ def updatePlayerCompositeScore(instance, player):
 
 def computeCompositeScore(instance, player):
     composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
+    check_count_lle = 0 ## checks to see if the y-balance types and leg lengths have data in them greater than zero
+    check_count_rle = 0 # checks to see if the y-balance types and right leg lengths have data in them greater than right leg
 
-
-
-    #compute based on data entry
-    if getattr(instance, "anterior_lle") != None and getattr(instance, "anterior_lle") != 0.0 and  getattr(instance, "leg_length_lle") != None\
-            and getattr(instance, "posterior_medial_lle") != None and getattr(instance, "posterior_lateral_lle") != None:
-        #then complete composite score
-        if player.leg_length_lle != "":
+    for i in composite_data_points:
+        if getattr(instance, i+"_lle") != 0.0 and getattr(instance, i+"_lle") and getattr(instance, i+"_lle") != None:
+            check_count_lle += 1
+        if check_count_lle > 3:
             anterior = getattr(instance, "anterior_lle")
             posterior_medial = getattr(instance, "posterior_medial_lle")
             posterior_lateral = getattr(instance, "posterior_lateral_lle")
             leg_length = getattr(instance, "leg_length_lle")
-            player.composite_score_lle = round( (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100) , 2 )
+            # import pdb; pdb.set_trace()
+            player.composite_score_lle = round(
+                (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
-    #computer based on data entry of all scores
-    if getattr(instance, "anterior_rle") != None and  getattr(instance, "leg_length_rle") != None\
-            and getattr(instance, "posterior_medial_rle") != None and getattr(instance, "posterior_lateral_rle") != None:
-        #check player conditions as well
-        if player.leg_length_rle != "":
+        if getattr(instance, i+"_rle") and getattr(instance, i+"_rle") and getattr(instance, i+"_rle") != None:
+            check_count_rle += 1
+        if check_count_rle > 3:
             anterior = getattr(instance, "anterior_rle")
             posterior_medial = getattr(instance, "posterior_medial_rle")
             posterior_lateral = getattr(instance, "posterior_lateral_rle")
             leg_length = getattr(instance, "leg_length_rle")
-            player.composite_score_rle = round( (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100) , 2 )
+            player.composite_score_rle = round(
+                (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
+
+def checkForYBalValues(instance, player):
+    composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
+
+    if player.leg_length_lle != 0.0 and player.anterior_lle != 0.0 and player.posterior_medial != 0.0 and\
+        player.posterior_lateral != 0.0:
+        return True
+
+    # #compute based on data entry
+    # if getattr(instance, "anterior_lle") != None and getattr(instance, "anterior_lle") != 0.0 and\
+    #     getattr(instance, "leg_length_lle") != None and getattr(instance, "leg_length_lle") != 0.0\
+    #     and getattr(instance, "posterior_medial_lle") != None and getattr(instance, "posterior_medial_lle") != 0.0\
+    #     and getattr(instance, "posterior_lateral_lle") != 0.0 and getattr(instance, "posterior_lateral_lle") != None:
+    #     #then complete composite score
+    #     if player.leg_length_lle != "":
+    #         anterior = getattr(instance, "anterior_lle")
+    #         posterior_medial = getattr(instance, "posterior_medial_lle")
+    #         posterior_lateral = getattr(instance, "posterior_lateral_lle")
+    #         leg_length = getattr(instance, "leg_length_lle")
+    #         player.composite_score_lle = round( (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100) , 2 )
+    #
+    # #computer based on data entry of all scores
+    # if getattr(instance, "anterior_rle") != None and  getattr(instance, "leg_length_rle") != None\
+    #         and getattr(instance, "posterior_medial_rle") != None and getattr(instance, "posterior_lateral_rle") != None:
+    #     #check player conditions as well
+    #     if player.leg_length_rle != "":
+    #         anterior = getattr(instance, "anterior_rle")
+    #         posterior_medial = getattr(instance, "posterior_medial_rle")
+    #         posterior_lateral = getattr(instance, "posterior_lateral_rle")
+    #         leg_length = getattr(instance, "leg_length_rle")
+    #         player.composite_score_rle = round( (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100) , 2 )
 
     player.save()
 
 def checkPlayerDashboard(instance, player):
     # compute playerdashboard data set right
     if player.anterior_rle != None and player.anterior_rle != 0.0 and player.posterior_medial_rle != None\
-        and player.posterior_medial_rle != 0.0 and player.posterior_lateral_rle != None and player.posterior_lateral_rle != 0.0:
+        and player.posterior_medial_rle != 0.0 and player.posterior_lateral_rle != None and player.posterior_lateral_rle != 0.0 and player.leg_length_rle != 0.0:
         anterior = player.anterior_rle
         posterior_medial = player.posterior_medial_rle
         posterior_lateral = player.posterior_lateral_rle
         leg_length = player.leg_length_rle
+        # import pdb; pdb.set_trace()
         player.composite_score_rle = round(
             (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
     # computer playerdashboard data set for left
     if player.anterior_lle != None  and player.anterior_lle != 0.0 and  player.posterior_medial_lle != None\
-            and player.posterior_medial_lle != 0.0 and player.posterior_lateral_lle != None and player.posterior_lateral_lle != 0.0:
+            and player.posterior_medial_lle != 0.0 and player.posterior_lateral_lle != None and player.posterior_lateral_lle != 0.0\
+            and player.leg_length_lle != 0.0:
+
         anterior = player.anterior_lle
         posterior_medial = player.posterior_medial_lle
         posterior_lateral = player.posterior_lateral_lle
         leg_length = player.leg_length_lle
+        # import pdb;
+        # pdb.set_trace()
         player.composite_score_lle = round(
             (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
