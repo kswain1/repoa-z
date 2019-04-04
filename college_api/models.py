@@ -156,7 +156,7 @@ def update_composite_score(sender, **kwargs):
 
 def updatePlayerCompositeScore(instance, player):
     composite_data_points = ["leg_length", "anterior", "posterior_medial", "posterior_lateral"]
-    ##iterate throught the composite score
+    ##iterate throught the composite scor
     for i in composite_data_points:
         ## field is set to be our player profile muscle field
         if getattr(instance, i + "_lle") != 0.0 and getattr(instance, i + "_lle") != "" and getattr(instance, i + "_lle") != None:
@@ -193,7 +193,7 @@ def computeCompositeScore(instance, player):
             posterior_medial = getattr(instance, "posterior_medial_lle")
             posterior_lateral = getattr(instance, "posterior_lateral_lle")
             leg_length = getattr(instance, "leg_length_lle")
-            # import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             player.composite_score_lle = round(
                 (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
@@ -204,6 +204,7 @@ def computeCompositeScore(instance, player):
             posterior_medial = getattr(instance, "posterior_medial_rle")
             posterior_lateral = getattr(instance, "posterior_lateral_rle")
             leg_length = getattr(instance, "leg_length_rle")
+            #import pdb; pdb.set_trace()
             player.composite_score_rle = round(
                 (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
@@ -242,13 +243,14 @@ def checkForYBalValues(instance, player):
 
 def checkPlayerDashboard(instance, player):
     # compute playerdashboard data set right
+    #import pdb; pdb.set_trace()
     if player.anterior_rle != None and player.anterior_rle != 0.0 and player.posterior_medial_rle != None\
         and player.posterior_medial_rle != 0.0 and player.posterior_lateral_rle != None and player.posterior_lateral_rle != 0.0 and player.leg_length_rle != 0.0:
         anterior = player.anterior_rle
         posterior_medial = player.posterior_medial_rle
         posterior_lateral = player.posterior_lateral_rle
         leg_length = player.leg_length_rle
-        # import pdb; pdb.set_trace()
+        #import pdb; pdb.set_trace()
         player.composite_score_rle = round(
             (((anterior + posterior_medial + posterior_lateral) / (3 * leg_length)) * 100), 2)
 
@@ -465,9 +467,9 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 minCounter = 0
 
                 for i in range(0, len(emg_data)):
-                    if emg_data[i] >=  (mvc* .70):
+                    if emg_data[i] >=  (mvc* .50):
                        maxCounter += 1
-                    elif emg_data[i] >= (mvc* .50):
+                    elif emg_data[i] >= (mvc* .30):
                         subMaxCounter += 1
                     else:
                         minCounter += 1
