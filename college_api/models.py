@@ -504,9 +504,9 @@ def updateYbalPlayerProfile(instance, playerProfile):
                 minCounter = 0
 
                 for i in range(0, len(emg_data)):
-                    if emg_data[i] >= (mvc * .70):
+                    if emg_data[i] >= (mvc * .50):
                         maxCounter += 1
-                    elif emg_data[i] >= (mvc * .50):
+                    elif emg_data[i] >= (mvc * .30):
                         subMaxCounter += 1
                     else:
                         minCounter += 1
