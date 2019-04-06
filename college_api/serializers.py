@@ -207,7 +207,9 @@ class PlayerProfileSerializer(serializers.ModelSerializer):
         print(muscle_data)
         for muscle in muscles:
             if muscle_data[muscle]:
-                muscle_data[muscle] = json.loads(muscle_data[muscle].replace("'",'"'))  #replacing single quotes with double quotes
+                print("remove me later,", muscle_data[muscle])
+                muscle_data[muscle] = json.loads(muscle_data[muscle].replace("'",'"')) #replacing single quotes with double quotes
+
         return muscle_data
 
     def get_user_id(self):
