@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+import json
 from . import models
 
 
@@ -29,6 +29,14 @@ class AthleteProfileSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class UserRole(serializers.ModelSerializer):
+    """roles of the different types of user"""
+
+    class Meta:
+        model = models.UserRole
+        fields = ('id', 'user_role')
+
 
 
 class Team(serializers.ModelSerializer):
@@ -68,6 +76,16 @@ class Session(serializers.ModelSerializer):
                   'med_gastro_rle', 'tib_anterior_lle', 'tib_anterior_rle', 'lat_gastro_lle', 'lat_gastro_rle',
                   'created_on', 'assessment', 'treatment')
         extra_kwargs = {'trainer_profile': {'read_only': True}}
+
+
+class CompositeScore(serializers.ModelSerializer):
+    """serializer for the composite score bar"""
+
+    class Meta:
+        model = models.CompositeScore
+        fields = ('id','user','name','leg_length_rle', 'leg_length_lle','anterior_rle','anterior_lle',
+                  'posterior_medial_rle', 'posterior_medial_lle','posterior_lateral_lle','posterior_lateral_rle')
+        extra_kwargs = {'user':{'read_only':True}}
 
 
 
@@ -145,6 +163,54 @@ class MVCSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MVC
         fields = ('id', 'user_profile', 'player_profile', 'tib_anterior_lle', 'tib_anterior_rle', 'med_gastro_lle',
-                  'med_gastro_rle','peroneals_lle', 'peroneals_rle', 'lat_gastro_rle', 'lat_gastro_lle',
+                  'med_gastro_rle','peroneals_lle', 'peroneals_rle', 'lat_gastro_rle', 'lat_gastro_lle', 'mvc',
                   'created_on')
         extra_kwargs = {'user_profile': {'read_only': True}}
+class MVCLogSerializer(serializers.ModelSerializer):
+    """A serializer for posting MVC Log data from the EMG"""
+
+    class Meta:
+        model = models.MVCLog
+        fields = ('id', 'user_id', 'player_profile', 'tib_anterior_lle','tib_anterior_rle', 'med_gastro_lle', 'med_gastro_rle',
+                  'peroneals_lle','peroneals_rle','lat_gastro_lle','lat_gastro_rle','mvc','created_on')
+        extra_kwargs = {'user_id': {'read_only':True}}
+
+class MVCType(serializers.ModelSerializer):
+    """A serializer for the different types of MVC data collection"""
+
+    class Meta:
+        model = models.MVCType
+        fields = ('id', 'mvc_name')
+
+
+
+class PlayerProfileSerializer(serializers.ModelSerializer):
+    """a serializer for player objects"""
+    player_name = serializers.CharField(source='Player.player_name', read_only=True)
+    print(player_name)
+
+    class Meta:
+        model = models.PlayerProfile
+        fields = ('id', 'user_id', 'player_name','name','leg_length_rle', 'leg_length_lle', 'anterior_rle', 'anterior_lle',
+                  'posterior_medial_rle', 'posterior_medial_lle', 'posterior_lateral_rle', 'posterior_lateral_lle',
+                  'composite_score_lle', 'composite_score_rle', 'med_gastro', 'lat_gastro', 'tib_anterior', 'peroneals')
+        extra_kwargs = {'user_id':{'read_only':True}}
+
+    # def get_med_gastro(self, value):
+    #     muscle_data = json.loads(value.med_gastro)
+    #     print("Hello we made it here")
+    #     return muscle_data
+
+    def to_representation(self, instance):
+        muscles = ["med_gastro","lat_gastro","tib_anterior","peroneals"]
+        muscle_data = super().to_representation(instance)
+        print(muscle_data)
+        for muscle in muscles:
+            if muscle_data[muscle]:
+                print("remove me later,", muscle_data[muscle])
+                muscle_data[muscle] = json.loads(muscle_data[muscle].replace("'",'"')) #replacing single quotes with double quotes
+
+        return muscle_data
+
+    def get_user_id(self):
+        print("we are int he user id field")

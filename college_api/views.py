@@ -105,6 +105,13 @@ class HelloWorldViewSet(viewsets.ViewSet):
         return Response({'http_method': "Delete"})
 
 
+class UserRoleViewSet(viewsets.ModelViewSet):
+    """stores the different types of users on the platform"""
+    serializer_class = serializers.UserRole
+    queryset = models.UserRole.objects.all()
+
+
+
 # class AthleteProfileViewSet(views.ModelViewSet):
 # 	"""Handles creating, profiles"""
 
@@ -234,7 +241,7 @@ class Composite(viewsets.ModelViewSet):
     authentication_classes = (TokenAuthentication,)
     #permission_classes = (permissions.UpdatePlayerSession, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('player_profile__player_name', 'player_profile__id', 'team_id')
+    search_fields = ('player_profile__player_name', 'player_profile__id') ##have to use comme if we are just using one word
 
 class Injury(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
@@ -242,6 +249,59 @@ class Injury(viewsets.ModelViewSet):
     queryset = models.Injury.objects.all()
     # filter_backends = (filters.SearchFilter)
     # search_fields = ('ri)
+
+
+class MVCTypeViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.MVCType
+    queryset = models.MVCType.objects.all()
+
+class MVCLogViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.MVCLogSerializer
+    queryset = models.MVCLog.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes =  (permissions.UpdateMVCLog, IsAuthenticatedOrReadOnly)
+
+    def perform_create(self, serializer):
+        """automatically sets user_id based on user being logged in"""
+        serializer.save(user_id=self.request.user)
+
+class PlayerProfileSearch(filters.SearchFilter):
+
+    def filter_queryset(self, request, queryset, view):
+        result = super().filter_queryset(request, queryset, view)
+        search_term = self.get_search_terms(request)
+        if len(search_term) > 0:
+            result = result.filter(name__id = self.get_search_terms(request)[0])
+
+        return result
+
+
+class PlayerProfileViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.PlayerProfileSerializer
+    queryset = models.PlayerProfile.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
+    filter_backends = (PlayerProfileSearch,)
+    search_fields = ('name__id',) ##have to use comme if we are just using one word
+
+
+
+    def perform_create(self, serializer):
+        """automagically sets the user_id to the usr being logged into"""
+        serializer.save(user_id=self.request.user)
+
+
+class CompositeScore(viewsets.ModelViewSet):
+    serializer_class = serializers.CompositeScore
+    queryset = models.CompositeScore.objects.all()
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (permissions.UserProfileAuthenticate, IsAuthenticatedOrReadOnly)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name__id',)
+
+    def perform_create(self, serializer):
+        """authenticate the user id"""
+        serializer.save(user=self.request.user)
 
 class MVCData(viewsets.ModelViewSet):
     """creates a injury list for athletes to choose from"""
@@ -292,6 +352,7 @@ class PlayerInjuryDashboard(ObjectMultipleModelAPIView):
 
     filter_backends = (filters.SearchFilter,)
     search_fields = ('id',)
+
 
 
 class MVC(APIView):
