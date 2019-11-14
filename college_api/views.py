@@ -187,7 +187,7 @@ class Player(viewsets.ModelViewSet):
     serializer_class = serializers.Player
     queryset = models.Player.objects.all()
     authentication_classes = (TokenAuthentication,)
-    permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
+    # permission_classes = (permissions.UpdatePlayerProfile, IsAuthenticatedOrReadOnly)
     filter_backends = (filters.SearchFilter,DjangoFilterBackend)
     search_fields = ('team__id','player_name')
     # filter_fields = ('team',)
